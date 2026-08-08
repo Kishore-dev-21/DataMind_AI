@@ -1,4 +1,4 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   BarChart3,
@@ -42,6 +42,21 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
   const [query, setQuery] = useState("");
   const [expandedCategory, setExpandedCategory] = useState<string | null>("Revenue & Payments");
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
+
+  const handleNewChat = () => {
+    newConversation();
+    if (pathname !== "/") {
+      navigate({ to: "/" });
+    }
+  };
+
+  const handleSelectConversation = (id: string) => {
+    selectConversation(id);
+    if (pathname !== "/") {
+      navigate({ to: "/" });
+    }
+  };
 
   const filtered = conversations.filter((c) =>
     c.title.toLowerCase().includes(query.toLowerCase()),
@@ -73,8 +88,8 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
       <div className="px-3 space-y-1.5">
         <motion.button
           whileTap={{ scale: 0.98 }}
-          onClick={newConversation}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-[var(--color-violet)] px-3 py-2.5 text-sm font-medium text-primary-foreground shadow-lg shadow-primary/20 transition-opacity hover:opacity-90"
+          onClick={handleNewChat}
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-[var(--color-violet)] px-3 py-2.5 text-sm font-medium text-primary-foreground shadow-lg shadow-primary/20 transition-opacity hover:opacity-90 cursor-pointer"
         >
           <Plus className="size-4" /> New chat
         </motion.button>
@@ -114,7 +129,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
                 title={c.title}
                 active={c.id === activeId && pathname === "/"}
                 pinned
-                onSelect={() => selectConversation(c.id)}
+                onSelect={() => handleSelectConversation(c.id)}
                 onPin={() => togglePin(c.id)}
                 onDelete={() => deleteConversation(c.id)}
               />
@@ -128,7 +143,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
               key={c.id}
               title={c.title}
               active={c.id === activeId && pathname === "/"}
-              onSelect={() => selectConversation(c.id)}
+              onSelect={() => handleSelectConversation(c.id)}
               onPin={() => togglePin(c.id)}
               onDelete={() => deleteConversation(c.id)}
             />
@@ -177,8 +192,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
                               key={q}
                               onClick={() => {
                                 send(q);
-                                // Navigate to home if not there
-                                if (pathname !== "/") window.location.href = "/";
+                                if (pathname !== "/") navigate({ to: "/" });
                               }}
                               className="flex w-full items-start gap-1.5 rounded-md px-1.5 py-1 text-left text-[11px] leading-tight text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
                             >
