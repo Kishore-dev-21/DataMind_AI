@@ -1,145 +1,169 @@
-# 🧠 DataMind AI — Conversational Database Intelligence Platform
+# DataMind AI — Conversational Database Intelligence Platform
 
-> **AI Innovation Hackathon Showcase** — A production-ready, ChatGPT-like conversational intelligence platform that translates natural language into real-time SQL, interactive data visualizations, ER diagrams, and executive business insights across e-commerce databases.
-
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript)](https://www.typescriptlang.org/)
-[![React 19](https://img.shields.io/badge/React-19.2-61DAFB?logo=react)](https://react.dev/)
-[![Vite](https://img.shields.io/badge/Vite-8.1-646CFF?logo=vite)](https://vitejs.dev/)
-[![TailwindCSS v4](https://img.shields.io/badge/TailwindCSS-4.2-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+DataMind AI is an enterprise-grade, production-ready conversational database intelligence platform designed for natural language data interaction. Built for high-performance database exploration, the platform translates plain-English questions into real-time executable SQL, dynamic charts, ER flowcharts, automated statistical summaries, and executive business insights.
 
 ---
 
-## 🌟 Primary Goal & Design Vision
+## Primary Vision and Design Principles
 
-**DataMind AI** provides a seamless, natural-language interface for exploring complex SQL databases without writing a single line of SQL manually. 
+DataMind AI enables technical and non-technical stakeholders to explore complex relational databases without manual SQL syntax writing. Combining design patterns inspired by ChatGPT, Perplexity, Vercel, Linear, and Stripe, the application offers:
 
-Designed to combine the aesthetic excellence and UX paradigms of **ChatGPT**, **Perplexity**, **Vercel Dashboard**, **Linear**, and **Stripe**, DataMind AI presents database answers with:
-- 💬 **Live AI Chat & Natural Language Queries**
-- 📊 **Dynamic Interactive Recharts** (Area, Bar, Line, Pie, Donut, Scatter, Horizontal Bar)
-- 📐 **Interactive Mermaid Diagrams** (ER Diagrams, Flowcharts, Decision Trees)
-- 📋 **Integrated 8-Page Analytics Dashboard Console** (99,441 Olist e-commerce dataset)
-- 🗄️ **Schema Browser & SQL Viewer** with live execution time & token telemetry
-- 🎨 **Olist Slate & Warm Amber Gold (#F2B84B)** theme applied globally
-
----
-
-## 🛠️ Technology Stack
-
-| Layer | Technologies |
-|---|---|
-| **Core Framework** | React 19, Vite 8, TypeScript 5.8 |
-| **Routing & SSR** | TanStack Router, TanStack Start |
-| **State & Data Fetching** | Zustand, TanStack React Query v5 |
-| **Styling & UI** | TailwindCSS v4, shadcn/ui, Radix UI primitives, Lucide React Icons |
-| **Animations** | Framer Motion 12 |
-| **Visualizations** | Recharts, Mermaid.js |
-| **Markdown Rendering** | React Markdown, Remark GFM, KaTeX math |
-| **Backend API** | Python FastAPI, SQLite, Pandas, SQLAlechemy, Ollama / Groq |
+- Live AI Conversational Querying with step-by-step thinking telemetry
+- Interactive Data Visualizations (Recharts: Area, Bar, Line, Pie, Donut, Scatter, Horizontal Bar)
+- Dynamic Mermaid Diagrams (ER Diagrams, Flowcharts, Decision Trees)
+- Comprehensive 8-Page Analytics Dashboard Console
+- Database Schema Browser and SQL Execution Telemetry
+- Olist Slate Navy & Warm Amber Gold (#F2B84B) Enterprise Dark Theme
 
 ---
 
-## ✨ Key Features & Capabilities
+## Dataset: Olist Brazilian E-Commerce Public Dataset
 
-### 1. 💬 Conversational AI Chat Interface
-- **Natural Language to SQL**: Translates complex analytical questions into executable SQL.
-- **7-Step Animated AI Thinking Process**:
-  1. 🧠 *Understanding Question*
-  2. 📖 *Reading Database Schema*
-  3. ⚡ *Generating SQL*
-  4. 🚀 *Executing Query*
-  5. 📊 *Analyzing Data*
-  6. 🎨 *Creating Visualization*
-  7. 💡 *Generating Insights*
-- **Rich Message Output**: Displays SQL code blocks with copy/download, raw data tables, interactive charts, and business summaries.
-- **Voice Input Support**: Native Speech Recognition for voice-to-text querying.
-- **Context Panel**: Real-time telemetry displaying token usage, SQL execution time, active database, and detected tables.
+DataMind AI comes integrated with the official Olist Brazilian E-Commerce Public Dataset, comprising 100,000+ real e-commerce transactions across Brazil from 2016 to 2018.
 
-### 2. 📊 Embedded 8-Page Analytics Dashboard Console
-Integrated directly from pre-aggregated e-commerce data (99,441 orders):
-- 🏠 **Overview Dashboard**: High-level KPIs, 18-month revenue area chart, monthly order volume, status pie chart, key insights.
-- 🛒 **Orders Dashboard**: Horizontal status breakdown, status share donut, delivery performance metrics, top 5 expensive orders.
-- 💵 **Revenue Dashboard**: Revenue by payment method, payment distribution donut, breakdown table, revenue by status.
-- 📦 **Products Dashboard**: Top 15 categories toggleable bar chart, top 10 products by revenue & volume, bottom 10 lowest sellers.
-- 👥 **Customers Dashboard**: Top 15 state order/revenue distribution bar chart, top customer spenders.
-- 🔍 **Data Explorer**: Interactive filterable & sortable data table with instant search, status/state filters, pagination, and **CSV export**.
-- 🧪 **Statistics (EDA)**: Statistical summaries (Mean, Median, Std Dev, Q1/Q3, Outlier counts) for numerical attributes.
-- 🛡️ **Data Quality**: 90.3 overall quality score ring, table-level missing value stats, known issue alerts, and data lineage documentation.
+### Primary Dataset Tables and Schema
 
-### 3. 🗄️ Database & Schema Explorer
-- Multi-database support preview (SQLite, PostgreSQL, MySQL, MongoDB).
-- Expandable schema viewer displaying tables, column data types, primary/foreign keys, and table relationships.
-- Popular questions catalog with 1-click execution.
-
-### 4. 🎨 Design Aesthetics & Micro-Animations
-- Custom **Olist Slate Navy (`#0D1117`) & Warm Amber Gold (`#F2B84B`)** dark theme.
-- Glassmorphism overlays (`backdrop-blur`).
-- Animated cards, smooth page routing transitions, hover micro-interactions, and custom scrollbars.
+1. olist_orders_dataset: 99,441 order records containing order IDs, customer IDs, order status (delivered, shipped, canceled, invoiced, processing, unavailable, created, approved), purchase timestamps, approval times, and delivery estimates.
+2. olist_order_payments_dataset: 103,886 payment records detailing transaction values, payment types (credit card, boleto, voucher, debit card), and installment counts.
+3. olist_order_items_dataset: 112,650 order item entries mapping products to sellers, price, freight value, and shipping limits.
+4. olist_products_dataset: 32,951 unique product SKUs spanning 74 product categories with physical dimensions and weights.
+5. olist_customers_dataset: 99,441 unique buyer profiles categorized by customer city, zip code prefix, and state across all 27 Brazilian states.
+6. olist_sellers_dataset: 3,095 seller accounts with location and catalog metrics.
+7. olist_order_reviews_dataset: 99,224 customer reviews with rating scores (1 to 5 stars), titles, and comments.
+8. product_category_name_translation: Portuguese-to-English translation mappings for product category analysis.
 
 ---
 
-## 📂 Project Structure
+## Technical Stack
+
+### Frontend Core
+- React 19.2
+- Vite 8.1
+- TypeScript 5.8 (Strict Mode)
+
+### Routing and SSR
+- TanStack Router
+- TanStack Start
+
+### State Management and Data Fetching
+- Zustand 5.0
+- TanStack React Query v5
+
+### UI, Styling, and Iconography
+- TailwindCSS v4
+- shadcn/ui and Radix UI Primitives
+- Framer Motion 12.4
+- Lucide React Icons
+
+### Visualizations and Rendering
+- Recharts 2.15
+- Mermaid.js 11.16
+- React Markdown 10.1 with Remark GFM and KaTeX Math
+
+### Backend API Infrastructure
+- Python FastAPI
+- SQLite / SQLAlchemy / Pandas
+- Ollama / Groq Llama 3 AI Provider Support
+
+---
+
+## Platform Features
+
+### 1. Conversational AI Chat Interface
+- Natural Language to SQL Engine: Generates valid ANSI SQL queries from natural language user inputs.
+- 7-Step Animated Process Telemetry:
+  1. Understanding Question
+  2. Reading Database Schema
+  3. Generating SQL
+  4. Executing Query
+  5. Analyzing Data
+  6. Creating Visualization
+  7. Generating Insights
+- Rich Message Cards: Displays formatted markdown text, executable SQL code blocks with copy/download options, tabular result sets, responsive charts, and business recommendations.
+- Voice Recognition: Integrated Speech-to-Text for hands-free database querying.
+- Side Telemetry Panel: Monitors active database instance, detected tables, token consumption, and query latency.
+
+### 2. Embedded 8-Page Analytics Dashboard Console
+Access pre-aggregated analytical insights across 99,441 orders via the Analytics Console:
+
+- Overview Dashboard: Key performance indicators (Total Orders, Gross Revenue, Customer Count, AOV, Delivery Rate, Active Sellers, Average Rating), 18-month revenue trend, order volume bar, status distribution pie, and AI insights.
+- Orders Dashboard: Horizontal status breakdown, status share donut chart, monthly volume trends, delivery timeline metrics, and top 5 highest value orders.
+- Revenue Dashboard: Revenue by payment method, payment distribution donut, detailed method comparison table, and revenue per order status.
+- Products Dashboard: Top 15 categories by revenue/volume, top 10 products by revenue, top 10 products by order volume, and bottom 10 lowest sellers.
+- Customers Dashboard: Top 15 states by order volume and revenue, top 10 customer spenders, customer distribution maps.
+- Data Explorer: Comprehensive tabular data view with instant search, multi-column filters (Status, State), column sorting, pagination, and CSV Export.
+- Exploratory Data Analysis (EDA): Box-plot metrics (Mean, Median, Standard Deviation, Q1, Q3, Min, Max, Outliers) for price, freight, payment value, review score, and delivery duration.
+- Data Quality and Lineage: Quality score calculation (90.3/100), per-table missing cell metrics, duplicate row verification, known issue notifications, and source data lineage.
+
+### 3. Schema Browser and SQL Workspace
+- Schema exploration for SQLite, PostgreSQL, MySQL, and MongoDB.
+- Interactive table inspection displaying column types, primary keys, foreign key constraints, and table relationships.
+- Popular questions catalog organized by analytical domains (Revenue, Orders, Customers, Time-based, Comparisons).
+
+---
+
+## Project Structure
 
 ```
-dataagent-main/
+DataMind_AI/
 ├── src/
 │   ├── components/
-│   │   ├── dashboard/          # KPICard and dashboard sub-components
-│   │   ├── layout/             # AppShell, Navbar, Sidebar (with quick actions)
-│   │   └── ui/                 # shadcn/ui components
+│   │   ├── dashboard/          # KPICard and analytics dashboard components
+│   │   ├── layout/             # AppShell, Navbar, Sidebar with quick actions
+│   │   └── ui/                 # Core UI component library
 │   ├── lib/
 │   │   ├── dashboard-data.ts   # Pre-aggregated Olist e-commerce dataset module
-│   │   └── utils.ts            # Class merging & utility functions
+│   │   └── utils.ts            # Utility functions and class merging
 │   ├── routes/
-│   │   ├── __root.tsx          # TanStack Router root component
-│   │   ├── index.tsx           # Home AI Chat page
+│   │   ├── __root.tsx          # Root layout route
+│   │   ├── index.tsx           # AI Chat interface page
 │   │   ├── database.tsx        # Schema Explorer page
-│   │   ├── settings.tsx        # User settings & theme configuration page
-│   │   └── dashboard/          # Analytics Dashboard routes
+│   │   ├── settings.tsx        # Settings and theme selection page
+│   │   └── dashboard/          # 8 Analytics Dashboard route pages
 │   │       ├── index.tsx       # Overview Dashboard
 │   │       ├── orders.tsx      # Orders Analysis
-│   │       ├── revenue.tsx     # Revenue & Payment Analysis
-│   │       ├── products.tsx     # Products & Category Analysis
-│   │       ├── customers.tsx    # Customer Analysis & State Breakdown
-│   │       ├── explorer.tsx     # Data Explorer & CSV Export
-│   │       ├── eda.tsx          # Exploratory Data Analysis (Statistics)
-│   │       └── quality.tsx      # Data Quality & Lineage Report
+│   │       ├── revenue.tsx     # Revenue Analysis
+│   │       ├── products.tsx    # Products Analysis
+│   │       ├── customers.tsx   # Customer Analysis
+│   │       ├── explorer.tsx    # Data Explorer
+│   │       ├── eda.tsx         # EDA Statistics
+│   │       └── quality.tsx     # Data Quality & Lineage
 │   ├── stores/
-│   │   └── chat-store.ts       # Zustand store for chat history, settings, and themes
-│   ├── styles.css              # Global Tailwind CSS v4 design tokens & theme variables
-│   └── routeTree.gen.ts        # TanStack Router auto-generated route tree
-├── vercel.json                 # Vercel single-page & SSR deployment configuration
+│   │   └── chat-store.ts       # State management for chat history and settings
+│   ├── styles.css              # Global design tokens and theme variables
+│   └── routeTree.gen.ts        # TanStack Router generated route definitions
+├── vercel.json                 # Vercel deployment configuration
 └── README.md
 ```
 
 ---
 
-## ⚡ Quick Start / Local Development
+## Installation and Local Setup
 
 ### Prerequisites
-- **Node.js** >= 18.0.0
-- **npm** >= 9.0.0
+- Node.js >= 18.0.0
+- npm >= 9.0.0
 
-### Installation & Run
+### Local Setup Steps
 
-1. **Clone the Repository:**
+1. Clone the Repository:
    ```bash
    git clone https://github.com/Kishore-dev-21/DataMind_AI.git
    cd DataMind_AI
    ```
 
-2. **Install Dependencies:**
+2. Install Dependencies:
    ```bash
    npm install
    ```
 
-3. **Start Development Server:**
+3. Run Development Server:
    ```bash
    npm run dev
    ```
-   Open `http://localhost:8080` in your browser.
+   Open http://localhost:8080 in your web browser.
 
-4. **Verify TypeScript Build:**
+4. Verify Production Build:
    ```bash
    npx tsc --noEmit
    npm run build
@@ -147,17 +171,17 @@ dataagent-main/
 
 ---
 
-## 🚀 Cloud Deployment
+## Deployment
 
-### Deploy on Vercel (1-Click Setup)
-The repository includes a pre-configured `vercel.json` file ready for Vercel deployment:
+### Vercel Deployment
+The repository includes a pre-configured vercel.json file for immediate deployment on Vercel:
 
-1. Import repository `Kishore-dev-21/DataMind_AI` into **[Vercel](https://vercel.com)**.
-2. Vercel will automatically detect `vercel.json`.
-3. Click **Deploy**.
+1. Import Kishore-dev-21/DataMind_AI into your Vercel account.
+2. Vercel automatically detects build configuration.
+3. Click Deploy.
 
 ---
 
-## 📄 License
+## License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
