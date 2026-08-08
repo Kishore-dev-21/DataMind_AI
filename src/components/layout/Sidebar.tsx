@@ -7,6 +7,7 @@ import {
   Database,
   DollarSign,
   GitCompare,
+  LayoutDashboard,
   MessageSquare,
   Pin,
   PinOff,
@@ -77,6 +78,19 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
         >
           <Plus className="size-4" /> New chat
         </motion.button>
+
+        <Link
+          to="/dashboard"
+          className={cn(
+            "flex w-full items-center justify-center gap-2 rounded-xl border border-sidebar-border px-3 py-2 text-xs font-medium transition-all hover:border-primary/50 hover:bg-sidebar-accent",
+            pathname.startsWith("/dashboard")
+              ? "border-primary/60 bg-sidebar-accent text-primary font-semibold shadow-sm"
+              : "bg-background/40 text-muted-foreground"
+          )}
+        >
+          <LayoutDashboard className="size-3.5 text-primary shrink-0" />
+          <span>Analytics Dashboards</span>
+        </Link>
 
         <div className="relative">
           <Search className="pointer-events-none absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />

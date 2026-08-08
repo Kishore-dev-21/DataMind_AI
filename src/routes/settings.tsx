@@ -37,12 +37,21 @@ export const Route = createFileRoute("/settings")({
 // ============================================================
 
 const THEMES = [
-  { id: "oled", label: "Pure Pitch Black", desc: "High contrast OLED emerald — default", color: "#00F5A0" },
-  { id: "emerald", label: "Darkest Emerald", desc: "Official logo green theme", color: "#10B981" },
-  { id: "forest", label: "Deep Forest", desc: "Dark forest green accent", color: "#059669" },
+  { id: "olist", label: "Olist Slate & Amber", desc: "Warm Amber Gold & Slate Navy (Official Dashboard Theme)", color: "#F2B84B" },
+  { id: "oled", label: "Pure Pitch Black", desc: "High contrast OLED pitch black", color: "#00F5A0" },
+  { id: "emerald", label: "Darkest Emerald", desc: "Logo green theme", color: "#10B981" },
 ] as const;
 
 const THEME_VARS: Record<string, Record<string, string>> = {
+  olist: {
+    "--background": "oklch(0.12 0.015 250)",
+    "--card": "oklch(0.17 0.022 250)",
+    "--sidebar": "oklch(0.14 0.018 250)",
+    "--primary": "oklch(0.80 0.16 85)",
+    "--muted": "oklch(0.18 0.022 250)",
+    "--accent": "oklch(0.20 0.025 250)",
+    "--border": "oklch(0.26 0.025 250 / 60%)",
+  },
   oled: {
     "--background": "oklch(0.00 0.00 0)",
     "--card": "oklch(0.09 0.020 160)",
@@ -60,15 +69,6 @@ const THEME_VARS: Record<string, Record<string, string>> = {
     "--muted": "oklch(0.18 0.035 160)",
     "--accent": "oklch(0.22 0.055 160)",
     "--border": "oklch(0.35 0.06 160 / 22%)",
-  },
-  forest: {
-    "--background": "oklch(0.09 0.03 155)",
-    "--card": "oklch(0.14 0.04 155)",
-    "--sidebar": "oklch(0.10 0.035 155)",
-    "--primary": "oklch(0.68 0.20 152)",
-    "--muted": "oklch(0.16 0.035 155)",
-    "--accent": "oklch(0.18 0.045 155)",
-    "--border": "oklch(0.32 0.055 155 / 22%)",
   },
 };
 
@@ -141,7 +141,7 @@ function SettingsPage() {
   };
 
   // Apply theme to document root by setting CSS variables
-  const applyTheme = (themeId: "emerald" | "forest" | "oled") => {
+  const applyTheme = (themeId: "olist" | "emerald" | "oled") => {
     updateSettings({ theme: themeId });
     const root = document.documentElement;
     const vars = THEME_VARS[themeId];

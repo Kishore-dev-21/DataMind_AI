@@ -109,7 +109,7 @@ const uid = () => Math.random().toString(36).slice(2, 11);
 
 
 export interface AppSettings {
-  theme: "emerald" | "forest" | "oled";
+  theme: "olist" | "emerald" | "forest" | "oled";
   autoSendVoice: boolean;
   voiceLanguage: string;
   defaultRowLimit: number;
@@ -118,7 +118,7 @@ export interface AppSettings {
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
-  theme: "oled",
+  theme: "olist",
   autoSendVoice: false,
   voiceLanguage: "en-US",
   defaultRowLimit: 10,

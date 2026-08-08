@@ -12,8 +12,8 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-sans: "IBM Plex Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
@@ -57,52 +57,52 @@
 :root {
   --radius: 0.875rem;
 
-  /* === PURE PITCH BLACK (OLED) — DEFAULT THEME === */
-  --background: oklch(0.00 0.00 0);          /* Pure black */
-  --foreground: oklch(0.96 0.015 155);       /* Soft emerald white */
-  --surface: oklch(0.06 0.015 160);
-  --card: oklch(0.09 0.020 160);             /* Near-black card */
-  --card-foreground: oklch(0.96 0.015 155);
-  --popover: oklch(0.09 0.020 160);
-  --popover-foreground: oklch(0.96 0.015 155);
+  /* === OLIST AI DASHBOARD THEME (DEEP SLATE + AMBER GOLD) === */
+  --background: oklch(0.12 0.015 250);          /* #0D1117 */
+  --foreground: oklch(0.93 0.01 250);           /* #E7EAEE */
+  --surface: oklch(0.14 0.018 250);              /* #10151D */
+  --card: oklch(0.17 0.022 250);                 /* #151C26 */
+  --card-foreground: oklch(0.93 0.01 250);
+  --popover: oklch(0.17 0.022 250);
+  --popover-foreground: oklch(0.93 0.01 250);
 
-  --primary: oklch(0.82 0.22 155);           /* Bright neon emerald on pitch black */
-  --primary-foreground: oklch(0.05 0.02 160);
+  --primary: oklch(0.80 0.16 85);               /* #F2B84B - Warm Amber Gold */
+  --primary-foreground: oklch(0.12 0.03 85);
 
-  --secondary: oklch(0.12 0.030 160);
-  --secondary-foreground: oklch(0.96 0.015 155);
+  --secondary: oklch(0.20 0.025 250);            /* #1B2330 */
+  --secondary-foreground: oklch(0.93 0.01 250);
 
-  --muted: oklch(0.10 0.020 160);
-  --muted-foreground: oklch(0.60 0.060 155);
+  --muted: oklch(0.18 0.022 250);
+  --muted-foreground: oklch(0.65 0.020 250);     /* #8B94A3 */
 
-  --accent: oklch(0.14 0.035 160);
-  --accent-foreground: oklch(0.98 0.01 155);
+  --accent: oklch(0.20 0.025 250);               /* #1B2330 */
+  --accent-foreground: oklch(0.80 0.16 85);
 
-  --violet: oklch(0.78 0.20 145);
-  --cyan: oklch(0.85 0.18 165);
-  --success: oklch(0.80 0.22 150);
-  --warning: oklch(0.80 0.16 85);
-  --destructive: oklch(0.63 0.22 25);
+  --violet: oklch(0.70 0.18 300);                /* #B08BF0 */
+  --cyan: oklch(0.80 0.15 190);                  /* #4FD1C5 */
+  --success: oklch(0.75 0.18 150);               /* #3ECF8E */
+  --warning: oklch(0.80 0.16 85);                /* #F2B84B */
+  --destructive: oklch(0.60 0.20 25);            /* #E5646A */
   --destructive-foreground: oklch(0.99 0 0);
 
-  --border: oklch(0.28 0.05 160 / 30%);
-  --input: oklch(0.28 0.05 160 / 35%);
-  --ring: oklch(0.82 0.22 155);
+  --border: oklch(0.26 0.025 250 / 60%);         /* #252E3B */
+  --input: oklch(0.26 0.025 250 / 70%);
+  --ring: oklch(0.80 0.16 85);
 
-  --chart-1: oklch(0.82 0.22 155);           /* Neon emerald */
-  --chart-2: oklch(0.85 0.18 165);           /* Bright mint */
-  --chart-3: oklch(0.72 0.20 140);
-  --chart-4: oklch(0.86 0.16 120);
-  --chart-5: oklch(0.78 0.18 180);
+  --chart-1: oklch(0.80 0.16 85);               /* Amber Gold */
+  --chart-2: oklch(0.75 0.18 150);              /* Emerald Green */
+  --chart-3: oklch(0.65 0.18 250);              /* Soft Blue */
+  --chart-4: oklch(0.70 0.18 300);              /* Purple */
+  --chart-5: oklch(0.80 0.15 190);              /* Teal */
 
-  --sidebar: oklch(0.04 0.010 160);          /* Near-pure-black sidebar */
-  --sidebar-foreground: oklch(0.92 0.015 155);
-  --sidebar-primary: oklch(0.82 0.22 155);
-  --sidebar-primary-foreground: oklch(0.05 0.02 160);
-  --sidebar-accent: oklch(0.12 0.030 160);
-  --sidebar-accent-foreground: oklch(0.96 0.015 155);
-  --sidebar-border: oklch(0.28 0.05 160 / 20%);
-  --sidebar-ring: oklch(0.82 0.22 155);
+  --sidebar: oklch(0.14 0.018 250);              /* #10151D */
+  --sidebar-foreground: oklch(0.93 0.01 250);
+  --sidebar-primary: oklch(0.80 0.16 85);
+  --sidebar-primary-foreground: oklch(0.12 0.03 85);
+  --sidebar-accent: oklch(0.20 0.025 250);       /* #1B2330 */
+  --sidebar-accent-foreground: oklch(0.80 0.16 85);
+  --sidebar-border: oklch(0.22 0.020 250 / 80%);
+  --sidebar-ring: oklch(0.80 0.16 85);
 }
 
 @layer base {
@@ -126,26 +126,23 @@
   }
 
   ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
   }
   ::-webkit-scrollbar-track {
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: color-mix(in oklab, var(--foreground) 12%, transparent);
-    border-radius: 999px;
-    border: 3px solid transparent;
-    background-clip: content-box;
+    background: var(--color-border);
+    border-radius: 4px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: color-mix(in oklab, var(--foreground) 22%, transparent);
-    background-clip: content-box;
+    background: var(--color-muted-foreground);
   }
 }
 
 @utility glass {
-  background: color-mix(in oklab, var(--card) 75%, transparent);
+  background: color-mix(in oklab, var(--card) 85%, transparent);
   backdrop-filter: blur(18px) saturate(140%);
   border: 1px solid var(--color-border);
 }
@@ -153,9 +150,9 @@
 @utility gradient-text {
   background-image: linear-gradient(
     100deg,
-    #10B981,
-    #34D399 45%,
-    #00F5A0
+    #F2B84B,
+    #F59E0B 45%,
+    #3ECF8E
   );
   background-clip: text;
   color: transparent;
@@ -169,17 +166,17 @@
   background-image:
     radial-gradient(
       60% 45% at 15% 0%,
-      color-mix(in oklab, var(--primary) 22%, transparent),
+      color-mix(in oklab, var(--primary) 18%, transparent),
       transparent 70%
     ),
     radial-gradient(
       50% 40% at 85% 5%,
-      color-mix(in oklab, var(--violet) 20%, transparent),
+      color-mix(in oklab, var(--violet) 15%, transparent),
       transparent 70%
     ),
     radial-gradient(
       45% 45% at 50% 100%,
-      color-mix(in oklab, var(--cyan) 12%, transparent),
+      color-mix(in oklab, var(--cyan) 10%, transparent),
       transparent 70%
     );
 }
