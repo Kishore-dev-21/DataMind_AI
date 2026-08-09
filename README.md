@@ -10,9 +10,9 @@ DataMind AI is built around the Brazilian E-Commerce Public Dataset (Olist), a r
 
 **Live Demo:** [https://data-mind-ai-eken.vercel.app/](https://data-mind-ai-eken.vercel.app/)
 
-**Project Demo Youtube Video: ⬇️⬇️⬇️**  
+## Project Demo Video
 
-[![DataMind AI Prototype Demonstration](https://img.youtube.com/vi/Qu4EPjvnV_E/maxresdefault.jpg)](https://youtu.be/Qu4EPjvnV_E)
+[![DataMind AI Prototype Demonstration](https://img.youtube.com/vi/Qu4EPjvnV_E/maxresdefault.jpg)](https://youtu.be/Qu4EPjvnV_E "Watch DataMind AI Demo Video on YouTube")
 
 ---
 
@@ -375,8 +375,7 @@ uvicorn backend.main:app --reload
 * **Event**: iTech AI Innovation Hackathon 2026
 * **Challenge**: Building Intelligent LLM Agents for Database Interaction & Visualization
 * **Institution**: Sri Sairam Engineering College
-* **Hackathon Dates**: 1 August 2026 – 7 August 2026
-* **Team Size**: 4 Members
+* **Team Name**: SwiftTech
 
 ### Problem Statement Alignment
 
@@ -415,7 +414,7 @@ uvicorn backend.main:app --reload
 
 ## Team
 
-**DataMind AI Team**
+**SwiftTech**
 
 | No. | Student Name | Student ID | Department | Year |
 |---|---|---|---|---|
