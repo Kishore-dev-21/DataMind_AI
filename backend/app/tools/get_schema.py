@@ -25,13 +25,18 @@ def get_schema():
 
         columns = cursor.fetchall()
 
-        schema[table_name] = [
-            {
-                "column": column[1],
-                "type": column[2]
-            }
-            for column in columns
-        ]
+        schema[table_name] = []
+        for column in columns:
+            col_name = column[1]
+            col_type = column[2]
+            
+            if table_name == "orders" and col_name == "order_status":
+                col_type += " (values: delivered, invoiced, shipped, processing, unavailable, canceled, created, approved)"
+                
+            schema[table_name].append({
+                "column": col_name,
+                "type": col_type
+            })
 
     conn.close()
 

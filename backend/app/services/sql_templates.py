@@ -180,7 +180,7 @@ ORDER BY count DESC
 """.strip()
 
     # "compare delivered and cancelled orders" / "delivered, cancelled, and pending orders"
-    if ("delivered" in q or "cancelled" in q or "canceled" in q or "pending" in q or "compare" in q) and "order" in q and "status" in q:
+    if ("delivered" in q or "cancelled" in q or "canceled" in q or "pending" in q or "status" in q) and "order" in q and ("compare" in q or "status" in q or "chart" in q or "showing" in q):
         return """
 SELECT order_status,
        COUNT(*) AS order_count,
