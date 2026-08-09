@@ -15,6 +15,7 @@ export interface FormattedResponse {
   sql?: SqlPayload;
   table?: TablePayload;
   chart?: ChartPayload | null;
+  csvOnly?: boolean;
   insights?: string[];
 }
 
@@ -518,7 +519,7 @@ export function formatResponse(
       : undefined;
 
   // 4. Build Chart Payload (use backend chart if provided, otherwise auto-generate)
-  const chart: ChartPayload | null =
+  let chart: ChartPayload | null =
     response.chart ?? buildChart(data, columns, kinds, question);
 
   // 5. Build Insights (use backend insights if provided, otherwise auto-generate)
@@ -527,11 +528,17 @@ export function formatResponse(
       ? response.insights
       : buildInsights(data, columns, kinds);
 
+  // If csvOnly is explicitly set by backend, clear the chart
+  if (response.csvOnly) {
+    chart = null;
+  }
+
   return {
     content,
     sql,
     table,
     chart,
+    csvOnly: response.csvOnly,
     insights,
   };
 }

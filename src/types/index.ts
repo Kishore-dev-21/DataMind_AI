@@ -42,6 +42,7 @@ export interface Message {
   content: string;
   createdAt: number;
   streaming?: boolean;
+  csvOnly?: boolean;
   steps?: ProcessStep[];
   sql?: SqlPayload;
   table?: TablePayload;

@@ -216,16 +216,6 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
         </Section>
       </nav>
 
-      {/* Footer */}
-      <div className="border-t border-sidebar-border p-3">
-        <Link
-          to="/settings"
-          className="flex items-center gap-2.5 rounded-xl px-2 py-2 text-xs text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
-        >
-          <Settings className="size-4 shrink-0" />
-          <span>Settings</span>
-        </Link>
-      </div>
     </aside>
   );
 }

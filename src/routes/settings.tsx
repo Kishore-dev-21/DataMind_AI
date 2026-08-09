@@ -5,7 +5,6 @@ import {
   Check,
   Download,
   Info,
-  Keyboard,
   Palette,
   RotateCcw,
   SlidersHorizontal,
@@ -95,14 +94,6 @@ const CHART_THEMES = [
   { id: "violet", label: "Purple / Violet", color: "#8B5CF6" },
   { id: "ocean", label: "Ocean Blue", color: "#3B82F6" },
   { id: "sunset", label: "Sunset Orange", color: "#F97316" },
-];
-
-const SHORTCUTS = [
-  ["Enter", "Send question"],
-  ["Shift + Enter", "New line in input"],
-  ["Click Microphone", "Toggle voice recognition"],
-  ["Esc", "Stop generation"],
-  ["Ctrl + K", "Focus chat input"],
 ];
 
 // ============================================================
@@ -497,25 +488,13 @@ function SettingsPage() {
               </div>
             </Card>
 
-            {/* 6. Keyboard Shortcuts */}
-            <Card icon={Keyboard} title="Keyboard Shortcuts" delay={0.25}>
-              {SHORTCUTS.map(([keys, action]) => (
-                <div key={keys} className="flex items-center justify-between py-1.5 text-xs border-b border-border/30 last:border-0">
-                  <span className="text-muted-foreground">{action}</span>
-                  <kbd className="rounded-md border border-border bg-secondary px-2 py-0.5 text-[11px] font-mono">
-                    {keys}
-                  </kbd>
-                </div>
-              ))}
-            </Card>
-
             {/* 7. About */}
             <Card icon={Info} title="About DataMind AI" delay={0.3}>
               <div className="space-y-1.5 text-xs text-muted-foreground leading-relaxed">
-                <p><span className="text-foreground font-medium">DataMind AI v1.0</span> — Natural language database intelligence platform.</p>
-                <p>Converts plain-English questions into precise SQL, runs them against your SQLite database, and returns interactive charts with business insights.</p>
+                <p><span className="text-foreground font-medium">DataMind AI v1.0</span> — Advanced Natural Language Database Intelligence Platform.</p>
+                <p>DataMind AI is designed to bridge the gap between complex data and non-technical users. It seamlessly converts plain-English questions into precise SQL queries, executes them securely against your database, and instantly returns interactive visualizations alongside actionable business insights.</p>
                 <p className="pt-1 text-[11px]">
-                  Stack: React 18 · TypeScript · TanStack Router · Zustand · Recharts · FastAPI · Gemini AI
+                  Stack: React 18 · TypeScript · TanStack Router · Zustand · Recharts · FastAPI · SQLite
                 </p>
               </div>
             </Card>

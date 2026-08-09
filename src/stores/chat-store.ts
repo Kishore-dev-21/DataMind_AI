@@ -356,6 +356,7 @@ export const useChatStore = create<ChatState>()(
             sql: formatted.sql,
             table: formatted.table,
             chart: formatted.chart ?? undefined,
+            csvOnly: formatted.csvOnly,
             insights: formatted.insights,
             streaming: false,
             steps: processSteps().map((step) => ({

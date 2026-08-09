@@ -7,6 +7,7 @@ def detect_intent(question: str) -> dict:
         "intent": "general",
         "aggregation_type": None,
         "chart_requested": None,
+        "csv_only": False,
         "entities": [],
         "modifiers": {
             "limit": None,
@@ -15,6 +16,9 @@ def detect_intent(question: str) -> dict:
             "group_by_field": None
         }
     }
+
+    if "only csv" in q or "as csv" in q or "csv only" in q:
+        intent_data["csv_only"] = True
 
     # ── Intent Classification ─────────────────────────────────
     if any(word in q for word in ["compare", "comparison", "versus", "vs"]):

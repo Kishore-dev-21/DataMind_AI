@@ -338,7 +338,10 @@ Generate ONE valid SQLite SELECT query. Return ONLY the SQL query, no markdown.
     # 7. CHART ENGINE → chart metadata
     # ------------------------------------------
     try:
-        chart = decide_chart(data, user_question, intent)
+        if intent.get("csv_only"):
+            chart = None
+        else:
+            chart = decide_chart(data, user_question, intent)
     except Exception as e:
         logger.warning(f"Chart engine failed: {e}")
         chart = None
@@ -365,6 +368,7 @@ Generate ONE valid SQLite SELECT query. Return ONLY the SQL query, no markdown.
             "row_count": row_count,
         },
         "chart": chart,
+        "csvOnly": intent.get("csv_only", False),
         "insights": insights,
         "tables_used": tables_used,
     }

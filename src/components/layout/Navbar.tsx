@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Database, Menu, Settings } from "lucide-react";
+import { Database, Menu } from "lucide-react";
 import { useActiveDatabase, useChatStore } from "@/stores/chat-store";
 import { StatusDot } from "./Sidebar";
 import { BrandMark } from "./BrandMark";
@@ -41,13 +41,6 @@ export function Navbar({
       </span>
 
       <div className="ml-auto flex items-center gap-2">
-        <Link
-          to="/settings"
-          aria-label="Settings"
-          className="grid size-9 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-        >
-          <Settings className="size-4" />
-        </Link>
       </div>
     </header>
   );
