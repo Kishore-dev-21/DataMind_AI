@@ -19,7 +19,7 @@ import {
   YAxis,
 } from "recharts";
 import { motion } from "framer-motion";
-import { Download, Expand, FileJson, FileSpreadsheet, X } from "lucide-react";
+import { Expand, X } from "lucide-react";
 import type { ChartPayload } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -38,6 +38,16 @@ const axisProps = {
   tickLine: false,
   axisLine: false,
 } as const;
+
+const xAxisProps = {
+  ...axisProps,
+  tickFormatter: (value: any) => {
+    if (typeof value === "string" && value.length > 14) {
+      return value.substring(0, 14) + "...";
+    }
+    return value;
+  },
+};
 
 function ChartTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null;
@@ -58,15 +68,46 @@ function ChartTooltip({ active, payload, label }: any) {
 }
 
 function Figure({ payload }: { payload: ChartPayload }) {
-  const { type, data, xKey, series } = payload;
+  const { type, xKey, series } = payload;
+  let { data } = payload;
   const grid = <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />;
+
+  // Aggregate duplicate xKey values by averaging their Y values to prevent repeating labels/messy vertical lines
+  if (data && data.length > 0 && xKey && type !== "scatter" && type !== "pie") {
+    const grouped: Record<string, any> = {};
+    data.forEach((item) => {
+      const xVal = String(item[xKey]);
+      if (!grouped[xVal]) {
+        grouped[xVal] = { ...item, _count: 1 };
+      } else {
+        series.forEach((s) => {
+          if (typeof item[s.key] === "number") {
+            grouped[xVal][s.key] = (grouped[xVal][s.key] || 0) + item[s.key];
+          }
+        });
+        grouped[xVal]._count += 1;
+      }
+    });
+
+    data = Object.values(grouped).map((group) => {
+      if (group._count > 1) {
+        series.forEach((s) => {
+          if (typeof group[s.key] === "number") {
+            group[s.key] = Number((group[s.key] / group._count).toFixed(2));
+          }
+        });
+      }
+      const { _count, ...rest } = group;
+      return rest;
+    });
+  }
 
   switch (type) {
     case "line":
       return (
         <LineChart data={data}>
           {grid}
-          <XAxis dataKey={xKey} {...axisProps} />
+          <XAxis dataKey={xKey} {...xAxisProps} />
           <YAxis {...axisProps} />
           <Tooltip content={<ChartTooltip />} cursor={{ stroke: "var(--color-border)" }} />
           <Legend wrapperStyle={{ fontSize: 11 }} />
@@ -97,7 +138,7 @@ function Figure({ payload }: { payload: ChartPayload }) {
             ))}
           </defs>
           {grid}
-          <XAxis dataKey={xKey} {...axisProps} />
+          <XAxis dataKey={xKey} {...xAxisProps} />
           <YAxis {...axisProps} />
           <Tooltip content={<ChartTooltip />} />
           <Legend wrapperStyle={{ fontSize: 11 }} />
@@ -139,7 +180,7 @@ function Figure({ payload }: { payload: ChartPayload }) {
       return (
         <ScatterChart>
           {grid}
-          <XAxis dataKey={xKey} {...axisProps} />
+          <XAxis dataKey={xKey} {...xAxisProps} />
           <YAxis dataKey={series[0].key} {...axisProps} />
           <Tooltip content={<ChartTooltip />} />
           <Scatter data={data} fill={series[0].color} animationDuration={900} />
@@ -150,7 +191,7 @@ function Figure({ payload }: { payload: ChartPayload }) {
         <BarChart data={data} layout="vertical" margin={{ left: 24 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" horizontal={false} />
           <XAxis type="number" {...axisProps} />
-          <YAxis type="category" dataKey={xKey} width={130} {...axisProps} />
+          <YAxis type="category" dataKey={xKey} width={130} {...xAxisProps} />
           <Tooltip content={<ChartTooltip />} cursor={{ fill: "var(--color-accent)", opacity: 0.4 }} />
           {series.map((s) => (
             <Bar
@@ -168,7 +209,7 @@ function Figure({ payload }: { payload: ChartPayload }) {
       return (
         <BarChart data={data}>
           {grid}
-          <XAxis dataKey={xKey} {...axisProps} />
+          <XAxis dataKey={xKey} {...xAxisProps} />
           <YAxis {...axisProps} />
           <Tooltip content={<ChartTooltip />} cursor={{ fill: "var(--color-accent)", opacity: 0.4 }} />
           <Legend wrapperStyle={{ fontSize: 11 }} />
@@ -190,45 +231,6 @@ function Figure({ payload }: { payload: ChartPayload }) {
 export function ChartCard({ payload }: { payload: ChartPayload }) {
   const [full, setFull] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-
-  const exportCsv = () => {
-    const keys = [payload.xKey, ...payload.series.map((s) => s.key)];
-    const csv = [
-      keys.join(","),
-      ...payload.data.map((row) => keys.map((k) => row[k]).join(",")),
-    ].join("\n");
-    downloadBlob(csv, "text/csv", "datamind-data.csv");
-  };
-
-  const exportJson = () =>
-    downloadBlob(JSON.stringify(payload.data, null, 2), "application/json", "datamind-data.json");
-
-  const exportPng = async () => {
-    const svg = ref.current?.querySelector("svg");
-    if (!svg) return;
-    const clone = svg.cloneNode(true) as SVGSVGElement;
-    const { width, height } = svg.getBoundingClientRect();
-    clone.setAttribute("width", String(width));
-    clone.setAttribute("height", String(height));
-    const source = new XMLSerializer().serializeToString(clone);
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = width * 2;
-      canvas.height = height * 2;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-      ctx.fillStyle = "#09090B";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.scale(2, 2);
-      ctx.drawImage(img, 0, 0);
-      const a = document.createElement("a");
-      a.href = canvas.toDataURL("image/png");
-      a.download = "datamind-chart.png";
-      a.click();
-    };
-    img.src = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(source)))}`;
-  };
 
   const body = (
     <div ref={ref} className={cn("w-full", full ? "h-[70vh]" : "h-72")}>
@@ -254,15 +256,6 @@ export function ChartCard({ payload }: { payload: ChartPayload }) {
             )}
           </div>
           <div className="flex shrink-0 items-center gap-1">
-            <Tool label="Export PNG" onClick={exportPng}>
-              <Download className="size-3.5" />
-            </Tool>
-            <Tool label="Export CSV" onClick={exportCsv}>
-              <FileSpreadsheet className="size-3.5" />
-            </Tool>
-            <Tool label="Export JSON" onClick={exportJson}>
-              <FileJson className="size-3.5" />
-            </Tool>
             <Tool label="Fullscreen" onClick={() => setFull(true)}>
               <Expand className="size-3.5" />
             </Tool>
@@ -302,14 +295,7 @@ export function ChartCard({ payload }: { payload: ChartPayload }) {
   );
 }
 
-function downloadBlob(content: string, type: string, name: string) {
-  const url = URL.createObjectURL(new Blob([content], { type }));
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = name;
-  a.click();
-  URL.revokeObjectURL(url);
-}
+
 
 function Tool({
   children,

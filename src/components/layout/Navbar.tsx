@@ -1,8 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { Database, Menu, Settings } from "lucide-react";
+import { Database, Menu, Settings, Wifi, WifiOff } from "lucide-react";
 import { useActiveDatabase, useChatStore } from "@/stores/chat-store";
 import { StatusDot } from "./Sidebar";
 import { BrandMark } from "./BrandMark";
+import { useEffect, useState } from "react";
+import { checkHealth } from "@/services/api";
 
 export function Navbar({
   onOpenSidebar,
@@ -11,6 +13,11 @@ export function Navbar({
 }) {
   const database = useActiveDatabase();
   const { provider } = useChatStore();
+  const [backendOnline, setBackendOnline] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    checkHealth().then(setBackendOnline);
+  }, []);
 
   return (
     <header className="flex h-13 shrink-0 items-center gap-3 border-b border-border bg-background/80 px-3 backdrop-blur-xl">
@@ -40,7 +47,25 @@ export function Navbar({
         ⚡ {provider}
       </span>
 
-      <div className="ml-auto flex items-center gap-1">
+      <div className="ml-auto flex items-center gap-2">
+        {/* Backend health indicator */}
+        {backendOnline !== null && (
+          <span
+            title={backendOnline ? "Backend is connected" : "Backend is offline"}
+            className={`hidden items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[11px] font-medium md:flex ${
+              backendOnline
+                ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+                : "border-destructive/30 bg-destructive/10 text-destructive"
+            }`}
+          >
+            {backendOnline ? (
+              <><Wifi className="size-3" /> Connected</>
+            ) : (
+              <><WifiOff className="size-3" /> Offline</>
+            )}
+          </span>
+        )}
+
         <Link
           to="/settings"
           aria-label="Settings"

@@ -1,187 +1,306 @@
-# DataMind AI — Conversational Database Intelligence Platform
+﻿# DataMind AI
 
-DataMind AI is an enterprise-grade, production-ready conversational database intelligence platform designed for natural language data interaction. Built for high-performance database exploration, the platform translates plain-English questions into real-time executable SQL, dynamic charts, ER flowcharts, automated statistical summaries, and executive business insights.
-
----
-
-## Primary Vision and Design Principles
-
-DataMind AI enables technical and non-technical stakeholders to explore complex relational databases without manual SQL syntax writing. Combining design patterns inspired by ChatGPT, Perplexity, Vercel, Linear, and Stripe, the application offers:
-
-- Live AI Conversational Querying with step-by-step thinking telemetry
-- Interactive Data Visualizations (Recharts: Area, Bar, Line, Pie, Donut, Scatter, Horizontal Bar)
-- Dynamic Mermaid Diagrams (ER Diagrams, Flowcharts, Decision Trees)
-- Comprehensive 8-Page Analytics Dashboard Console
-- Database Schema Browser and SQL Execution Telemetry
-- Olist Slate Navy & Warm Amber Gold (#F2B84B) Enterprise Dark Theme
+> **Conversational Database Intelligence Platform**  
+> Ask questions in plain English and instantly get SQL, charts, and insights from the Olist Brazilian E-Commerce dataset.
 
 ---
 
-## Dataset: Olist Brazilian E-Commerce Public Dataset
+## 🏗 Architecture
 
-DataMind AI comes integrated with the official Olist Brazilian E-Commerce Public Dataset, comprising 100,000+ real e-commerce transactions across Brazil from 2016 to 2018.
+`
+                        INTERNET
+                           |
+                           v
+                 +--------------------+
+                 |  Vercel Frontend   |
+                 |  React + Vite + TS |
+                 +--------------------+
+                           |
+                           | HTTPS REST API
+                           |
+                           v
+                 +--------------------+
+                 |   FastAPI Backend  |
+                 |   Cloud Hosted     |
+                 +--------------------+
+                      |          |
+                      |          |
+                      v          v
+                Gemini API     SQLite
+                               Olist DB
 
-### Primary Dataset Tables and Schema
-
-1. olist_orders_dataset: 99,441 order records containing order IDs, customer IDs, order status (delivered, shipped, canceled, invoiced, processing, unavailable, created, approved), purchase timestamps, approval times, and delivery estimates.
-2. olist_order_payments_dataset: 103,886 payment records detailing transaction values, payment types (credit card, boleto, voucher, debit card), and installment counts.
-3. olist_order_items_dataset: 112,650 order item entries mapping products to sellers, price, freight value, and shipping limits.
-4. olist_products_dataset: 32,951 unique product SKUs spanning 74 product categories with physical dimensions and weights.
-5. olist_customers_dataset: 99,441 unique buyer profiles categorized by customer city, zip code prefix, and state across all 27 Brazilian states.
-6. olist_sellers_dataset: 3,095 seller accounts with location and catalog metrics.
-7. olist_order_reviews_dataset: 99,224 customer reviews with rating scores (1 to 5 stars), titles, and comments.
-8. product_category_name_translation: Portuguese-to-English translation mappings for product category analysis.
-
----
-
-## Technical Stack
-
-### Frontend Core
-- React 19.2
-- Vite 8.1
-- TypeScript 5.8 (Strict Mode)
-
-### Routing and SSR
-- TanStack Router
-- TanStack Start
-
-### State Management and Data Fetching
-- Zustand 5.0
-- TanStack React Query v5
-
-### UI, Styling, and Iconography
-- TailwindCSS v4
-- shadcn/ui and Radix UI Primitives
-- Framer Motion 12.4
-- Lucide React Icons
-
-### Visualizations and Rendering
-- Recharts 2.15
-- Mermaid.js 11.16
-- React Markdown 10.1 with Remark GFM and KaTeX Math
-
-### Backend API Infrastructure
-- Python FastAPI
-- SQLite / SQLAlchemy / Pandas
-- Ollama / Groq Llama 3 AI Provider Support
+> The Gemini API key is EXCLUSIVELY held by the backend server.
+> It is NEVER exposed to the browser or frontend bundle.
+`
 
 ---
 
-## Platform Features
+## ✨ Features
 
-### 1. Conversational AI Chat Interface
-- Natural Language to SQL Engine: Generates valid ANSI SQL queries from natural language user inputs.
-- 7-Step Animated Process Telemetry:
-  1. Understanding Question
-  2. Reading Database Schema
-  3. Generating SQL
-  4. Executing Query
-  5. Analyzing Data
-  6. Creating Visualization
-  7. Generating Insights
-- Rich Message Cards: Displays formatted markdown text, executable SQL code blocks with copy/download options, tabular result sets, responsive charts, and business recommendations.
-- Voice Recognition: Integrated Speech-to-Text for hands-free database querying.
-- Side Telemetry Panel: Monitors active database instance, detected tables, token consumption, and query latency.
-
-### 2. Embedded 8-Page Analytics Dashboard Console
-Access pre-aggregated analytical insights across 99,441 orders via the Analytics Console:
-
-- Overview Dashboard: Key performance indicators (Total Orders, Gross Revenue, Customer Count, AOV, Delivery Rate, Active Sellers, Average Rating), 18-month revenue trend, order volume bar, status distribution pie, and AI insights.
-- Orders Dashboard: Horizontal status breakdown, status share donut chart, monthly volume trends, delivery timeline metrics, and top 5 highest value orders.
-- Revenue Dashboard: Revenue by payment method, payment distribution donut, detailed method comparison table, and revenue per order status.
-- Products Dashboard: Top 15 categories by revenue/volume, top 10 products by revenue, top 10 products by order volume, and bottom 10 lowest sellers.
-- Customers Dashboard: Top 15 states by order volume and revenue, top 10 customer spenders, customer distribution maps.
-- Data Explorer: Comprehensive tabular data view with instant search, multi-column filters (Status, State), column sorting, pagination, and CSV Export.
-- Exploratory Data Analysis (EDA): Box-plot metrics (Mean, Median, Standard Deviation, Q1, Q3, Min, Max, Outliers) for price, freight, payment value, review score, and delivery duration.
-- Data Quality and Lineage: Quality score calculation (90.3/100), per-table missing cell metrics, duplicate row verification, known issue notifications, and source data lineage.
-
-### 3. Schema Browser and SQL Workspace
-- Schema exploration for SQLite, PostgreSQL, MySQL, and MongoDB.
-- Interactive table inspection displaying column types, primary keys, foreign key constraints, and table relationships.
-- Popular questions catalog organized by analytical domains (Revenue, Orders, Customers, Time-based, Comparisons).
+- **Conversational AI** — Natural language → SQL via Google Gemini
+- **Live Query Execution** — Queries run against the real Olist SQLite database
+- **Automatic Chart Generation** — Bar, Line, Area, Pie, Scatter charts
+- **SQL Transparency** — Every AI-generated query is shown to the user
+- **Data Explorer** — Browse tables, columns, and schemas
+- **Dashboard Pages** — Pre-built analytics for Orders, Revenue, Products, Customers
+- **ER Diagrams** — Mermaid-powered schema visualizations
+- **Business Insights** — AI-generated summaries alongside results
+- **Backend Health Indicator** — Live "Connected / Offline" badge in the UI
 
 ---
 
-## Project Structure
+## 🛠 Tech Stack
 
-```
-DataMind_AI/
-├── src/
-│   ├── components/
-│   │   ├── dashboard/          # KPICard and analytics dashboard components
-│   │   ├── layout/             # AppShell, Navbar, Sidebar with quick actions
-│   │   └── ui/                 # Core UI component library
-│   ├── lib/
-│   │   ├── dashboard-data.ts   # Pre-aggregated Olist e-commerce dataset module
-│   │   └── utils.ts            # Utility functions and class merging
-│   ├── routes/
-│   │   ├── __root.tsx          # Root layout route
-│   │   ├── index.tsx           # AI Chat interface page
-│   │   ├── database.tsx        # Schema Explorer page
-│   │   ├── settings.tsx        # Settings and theme selection page
-│   │   └── dashboard/          # 8 Analytics Dashboard route pages
-│   │       ├── index.tsx       # Overview Dashboard
-│   │       ├── orders.tsx      # Orders Analysis
-│   │       ├── revenue.tsx     # Revenue Analysis
-│   │       ├── products.tsx    # Products Analysis
-│   │       ├── customers.tsx   # Customer Analysis
-│   │       ├── explorer.tsx    # Data Explorer
-│   │       ├── eda.tsx         # EDA Statistics
-│   │       └── quality.tsx     # Data Quality & Lineage
-│   ├── stores/
-│   │   └── chat-store.ts       # State management for chat history and settings
-│   ├── styles.css              # Global design tokens and theme variables
-│   └── routeTree.gen.ts        # TanStack Router generated route definitions
-├── vercel.json                 # Vercel deployment configuration
+| Layer       | Technology                                |
+|-------------|-------------------------------------------|
+| Frontend    | React 19, TypeScript, Vite, TanStack Router |
+| Styling     | Tailwind CSS, shadcn/ui, Framer Motion    |
+| Charts      | Recharts                                  |
+| Backend     | Python 3.11, FastAPI, Uvicorn             |
+| AI          | Google Gemini API (server-side only)      |
+| Database    | SQLite (Olist E-Commerce Dataset)         |
+| Frontend Deploy | Vercel                               |
+| Backend Deploy  | Render (or Railway / Fly.io)         |
+
+---
+
+## 📦 Dataset
+
+**Olist Brazilian E-Commerce Public Dataset**
+
+- 99,441 orders
+- 100K+ payment records
+- 32K+ products
+- 96K+ customers
+- 3,095 sellers
+- Period: September 2016 – August 2018
+
+---
+
+## 📁 Project Structure
+
+`
+datamind-ai/
+├── backend/                   # FastAPI application
+│   ├── main.py               # App entry point + CORS + health
+│   ├── requirements.txt      # Python dependencies
+│   ├── render.yaml           # Render deployment config
+│   ├── .env.example          # Template (no real secrets)
+│   ├── app/
+│   │   ├── api/ask.py        # POST /api/ask endpoint
+│   │   ├── services/
+│   │   │   ├── gemini_service.py    # Gemini API calls
+│   │   │   └── database_agent.py   # AI pipeline
+│   │   └── tools/
+│   │       └── execute_query.py    # SQLite query runner
+│   └── database/
+│       └── ecommerce.db      # Olist SQLite database
+│
+├── src/                       # React frontend
+│   ├── services/api.ts       # Centralized API client
+│   ├── components/           # UI components
+│   ├── routes/               # TanStack Router pages
+│   └── stores/               # Zustand state
+│
+├── vercel.json               # Vercel SPA config
+├── .env.example              # Frontend env template
 └── README.md
-```
+`
 
 ---
 
-## Installation and Local Setup
+## 🚀 Local Development
 
-### Prerequisites
-- Node.js >= 18.0.0
-- npm >= 9.0.0
+### 1. Backend Setup
 
-### Local Setup Steps
+`ash
+cd backend
 
-1. Clone the Repository:
-   ```bash
-   git clone https://github.com/Kishore-dev-21/DataMind_AI.git
-   cd DataMind_AI
-   ```
+# Create virtual environment
+python -m venv venv
 
-2. Install Dependencies:
-   ```bash
-   npm install
-   ```
+# Activate (Windows)
+venv\Scripts\activate
 
-3. Run Development Server:
-   ```bash
-   npm run dev
-   ```
-   Open http://localhost:8080 in your web browser.
+# Activate (macOS/Linux)
+source venv/bin/activate
 
-4. Verify Production Build:
-   ```bash
-   npx tsc --noEmit
-   npm run build
-   ```
+# Install dependencies
+pip install -r requirements.txt
 
----
+# Configure environment
+cp .env.example .env
+# Edit .env and fill in GEMINI_API_KEY
+`
 
-## Deployment
+Edit ackend/.env:
+`
+GEMINI_API_KEY=your_actual_key_here
+GEMINI_MODEL=gemini-3.5-flash
+ALLOWED_ORIGINS=http://localhost:5173,http://localhost:8080
+`
 
-### Vercel Deployment
-The repository includes a pre-configured vercel.json file for immediate deployment on Vercel:
+`ash
+# Start backend
+uvicorn main:app --reload --port 8000
+`
 
-1. Import Kishore-dev-21/DataMind_AI into your Vercel account.
-2. Vercel automatically detects build configuration.
-3. Click Deploy.
+Backend available at: http://127.0.0.1:8000  
+Swagger UI at: http://127.0.0.1:8000/docs
 
 ---
 
-## License
+### 2. Frontend Setup
 
-This project is licensed under the MIT License.
+`ash
+# From project root
+
+# Install dependencies
+npm install
+
+# Configure environment
+cp .env.example .env.local
+# .env.local already has: VITE_API_BASE_URL=http://127.0.0.1:8000
+
+# Start dev server
+npm run dev
+`
+
+Frontend available at: http://localhost:5173
+
+---
+
+## 🔑 Environment Variables
+
+### Backend (ackend/.env)
+
+| Variable          | Description                                    | Required |
+|-------------------|------------------------------------------------|----------|
+| GEMINI_API_KEY  | Your Google Gemini API key                     | ✅ Yes   |
+| GEMINI_MODEL    | Gemini model (default: gemini-3.5-flash)     | Optional |
+| ALLOWED_ORIGINS | Comma-separated list of allowed CORS origins   | Optional |
+
+### Frontend (Vercel Environment Variables or .env.local)
+
+| Variable            | Description                         | Required |
+|---------------------|-------------------------------------|----------|
+| VITE_API_BASE_URL | URL of the deployed FastAPI backend | ✅ Yes   |
+
+> ⚠️ **NEVER** set GEMINI_API_KEY as a VITE_ variable — it will be exposed in the browser bundle.
+
+---
+
+## 📡 API Endpoints
+
+### GET /
+Returns API status.
+
+### GET /health
+Health check for deployment validation.
+`json
+{ "status": "healthy", "service": "DataMind AI Backend" }
+`
+
+### POST /api/ask
+Ask a natural-language question about the database.
+
+**Request:**
+`json
+{ "question": "Show the total payment value by payment type" }
+`
+
+**Success Response:**
+`json
+{
+  "success": true,
+  "answer": "The total payment value by type is...",
+  "sql": "SELECT payment_type, SUM(payment_value) ...",
+  "result": {
+    "columns": ["payment_type", "total"],
+    "data": [...],
+    "row_count": 4
+  },
+  "chart": { "type": "bar", ... },
+  "summary": { "method": "gemini", "total_time_ms": 1240 }
+}
+`
+
+**Error Response:**
+`json
+{
+  "success": false,
+  "error": {
+    "code": "AI_QUOTA_EXHAUSTED",
+    "message": "AI request limit reached. Please wait a moment and try again."
+  }
+}
+`
+
+### GET /docs
+Swagger UI (interactive API documentation).
+
+### GET /api/schema
+Returns the full database schema used by the AI agent.
+
+---
+
+## ☁️ Deployment
+
+### Backend — Render
+
+1. Push the repository to GitHub.
+2. Go to [render.com](https://render.com) → New Web Service → Connect your repo.
+3. Set **Root Directory** to ackend.
+4. Render auto-detects ender.yaml and configures the service.
+5. Add environment variables in the Render dashboard:
+   - GEMINI_API_KEY = your key
+   - GEMINI_MODEL = gemini-3.5-flash
+   - ALLOWED_ORIGINS = https://YOUR-PROJECT.vercel.app
+6. Deploy. Your backend URL will be: https://datamind-ai-backend.onrender.com
+
+### Frontend — Vercel
+
+1. Go to [vercel.com](https://vercel.com) → New Project → Import your repo.
+2. Framework Preset: **Other** (Vite).
+3. Build Command: 
+pm run build
+4. Output Directory: .output/public
+5. Add Environment Variable:
+   - VITE_API_BASE_URL = https://datamind-ai-backend.onrender.com
+6. Deploy.
+
+**Important:** After getting both URLs, update ALLOWED_ORIGINS on Render to include your Vercel URL.
+
+---
+
+## 🔒 Security
+
+- ✅ Gemini API key is server-side only — never in the browser
+- ✅ .env is in .gitignore — never committed
+- ✅ Only SELECT and WITH SQL queries are allowed — no destructive operations
+- ✅ CORS is configured to only accept requests from trusted origins
+- ✅ Production uses HTTPS for both frontend (Vercel) and backend (Render)
+- ✅ No credentials appear in Swagger examples
+- ✅ User input is validated before processing
+
+---
+
+## 📸 Screenshots
+
+*Add screenshots here after deployment.*
+
+---
+
+## 🔗 Links
+
+- **Frontend (Vercel):** https://YOUR-PROJECT.vercel.app
+- **Backend (Render):** https://datamind-ai-backend.onrender.com
+- **Swagger UI:** https://datamind-ai-backend.onrender.com/docs
+- **Health Check:** https://datamind-ai-backend.onrender.com/health
+- **GitHub:** https://github.com/Kishore-dev-21/DataMind_AI
+
+---
+
+## 📄 License
+
+MIT

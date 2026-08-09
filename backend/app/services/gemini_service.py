@@ -6,17 +6,24 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_KEY = os.getenv("GEMINI_API_KEY")
+MODEL_ENV = os.getenv("GEMINI_MODEL")
 
 if not API_KEY:
     raise ValueError("GEMINI_API_KEY is not configured")
 
-# Models in priority order — tested working models first
+# Models in priority order — use latest stable models first
 MODELS_TO_TRY = [
-    "gemini-1.5-flash",
-    "gemini-1.5-pro",
-    "gemini-2.0-flash",
-    "gemini-2.0-flash-lite",
+    "gemini-3.5-flash",
+    "gemini-3.5-flash-lite",
+    "gemini-2.5-flash",
+    "gemini-2.5-pro",
 ]
+
+if MODEL_ENV and MODEL_ENV not in MODELS_TO_TRY:
+    MODELS_TO_TRY.insert(0, MODEL_ENV)
+elif MODEL_ENV in MODELS_TO_TRY:
+    MODELS_TO_TRY.remove(MODEL_ENV)
+    MODELS_TO_TRY.insert(0, MODEL_ENV)
 
 
 def ask_gemini(prompt: str) -> str:
@@ -33,7 +40,7 @@ def ask_gemini(prompt: str) -> str:
                 headers = {"Content-Type": "application/json"}
 
                 response = requests.post(
-                    url, json=payload, headers=headers, timeout=25
+                    url, json=payload, headers=headers, timeout=30
                 )
 
                 if response.status_code == 200:

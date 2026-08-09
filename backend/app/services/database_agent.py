@@ -93,6 +93,82 @@ Rules:
     return sql, "gemini"
 
 
+GREETINGS = {"hi", "hello", "hey", "hii", "hiii", "howdy", "yo", "sup", "greetings"}
+
+CONVERSATIONAL_KEYWORDS = [
+    "what can you do", "what do you do", "how do you work", "help me",
+    "who are you", "what are you", "tell me about yourself", "introduce yourself",
+    "what is datamind", "what is this", "capabilities", "features",
+    "what should i ask", "what questions", "guide me", "get started",
+]
+
+def _is_conversational(question: str) -> bool:
+    """Returns True if the question is conversational/greeting, not a database query."""
+    q = question.strip().lower().rstrip("!?.,")
+    if q in GREETINGS:
+        return True
+    if any(kw in q for kw in CONVERSATIONAL_KEYWORDS):
+        return True
+    # Very short non-analytical messages (< 4 words, no database keywords)
+    db_keywords = [
+        "order", "payment", "product", "customer", "revenue", "seller",
+        "review", "chart", "show", "top", "total", "average", "count",
+        "monthly", "trend", "category", "delivery", "sql", "query", "database"
+    ]
+    words = q.split()
+    if len(words) <= 3 and not any(kw in q for kw in db_keywords):
+        return True
+    return False
+
+
+def _conversational_response(question: str, pipeline_start: float) -> dict:
+    """Return a friendly assistant response for non-database conversational input."""
+    q = question.strip().lower().rstrip("!?.,")
+    total_time_ms = round((time.perf_counter() - pipeline_start) * 1000, 1)
+
+    if q in GREETINGS:
+        answer = (
+            "Hello! I'm **DataMind AI** — your conversational database intelligence assistant. "
+            "I can help you explore the Olist Brazilian E-Commerce dataset with natural language questions.\n\n"
+            "Here are some things you can ask me:\n"
+            "- **Show total payment value by payment type**\n"
+            "- **Top 10 products by revenue**\n"
+            "- **Monthly order trend as a line chart**\n"
+            "- **Show number of orders by status**\n"
+            "- **Draw ER diagram**\n\n"
+            "Just type your question and I'll write the SQL, run it, and show you the results with charts!"
+        )
+    else:
+        answer = (
+            "I'm **DataMind AI** — a conversational AI analyst for the Olist Brazilian E-Commerce database "
+            "(99,441 orders, 100K+ payments, 32K+ products).\n\n"
+            "I can:\n"
+            "- Translate your **natural language** questions into **SQL queries**\n"
+            "- Run queries instantly on the **live database**\n"
+            "- Generate **interactive charts** (bar, line, pie, area, scatter)\n"
+            "- Draw **ER diagrams** and flowcharts\n"
+            "- Provide **business insights** and summaries\n\n"
+            "Try asking: *'Show top 10 products by revenue'* or *'Monthly revenue trend'*"
+        )
+
+    return {
+        "success": True,
+        "answer": answer,
+        "summary": {
+            "rows": 0,
+            "execution_time_ms": 0,
+            "total_time_ms": total_time_ms,
+            "from_cache": False,
+            "method": "conversational",
+        },
+        "sql": "",
+        "result": {"columns": [], "data": [], "row_count": 0},
+        "chart": None,
+        "insights": [],
+        "tables_used": [],
+    }
+
+
 def ask_database(user_question: str) -> dict:
     """
     Full database-agent intelligence pipeline.
@@ -108,6 +184,13 @@ def ask_database(user_question: str) -> dict:
     """
 
     pipeline_start = time.perf_counter()
+
+    # ------------------------------------------
+    # 0. CONVERSATIONAL INPUT HANDLER
+    # ------------------------------------------
+    if _is_conversational(user_question):
+        logger.info(f"Conversational input detected: {user_question[:50]}")
+        return _conversational_response(user_question, pipeline_start)
 
     # ------------------------------------------
     # 1. CACHE CHECK
@@ -131,20 +214,39 @@ def ask_database(user_question: str) -> dict:
         sql, method = generate_sql(user_question, intent)
     except RuntimeError as e:
         err_str = str(e).lower()
-        if "quota" in err_str or "unavailable" in err_str or "429" in err_str:
-            logger.warning(f"Gemini quota/unavailable: {e}")
+        logger.warning(f"SQL generation via Gemini failed: {e}")
+        if "quota" in err_str or "429" in err_str:
             return _error_response(
                 question=user_question,
                 error_msg=(
-                    "This question needs AI assistance, but the AI service quota is currently exhausted. "
-                    "Try rephrasing your question more specifically (e.g. 'total payment value by payment type')."
+                    "The AI service is temporarily rate-limited. Please wait a moment and try again, "
+                    "or ask a more specific database question like 'Show top 10 products by revenue'."
                 ),
                 pipeline_start=pipeline_start,
             )
-        logger.error(f"SQL generation failed: {e}")
+        if "unavailable" in err_str or "503" in err_str:
+            return _error_response(
+                question=user_question,
+                error_msg=(
+                    "The AI service is temporarily unavailable. Please try again in a few seconds."
+                ),
+                pipeline_start=pipeline_start,
+            )
+        if "api key" in err_str or "api_key" in err_str or "not configured" in err_str:
+            return _error_response(
+                question=user_question,
+                error_msg=(
+                    "The Gemini API key is invalid or not configured. "
+                    "Please update GEMINI_API_KEY in backend/.env and restart the server."
+                ),
+                pipeline_start=pipeline_start,
+            )
         return _error_response(
             question=user_question,
-            error_msg="Unable to generate a SQL query for this question. Please try rephrasing.",
+            error_msg=(
+                "Unable to generate a SQL query for this question. "
+                "Try rephrasing it as a specific data question, e.g. 'Show total revenue by payment type'."
+            ),
             pipeline_start=pipeline_start,
         )
     except Exception as e:

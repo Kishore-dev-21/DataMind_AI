@@ -25,6 +25,8 @@ class AskRequest(BaseModel):
     question: str
 
 
+from fastapi.responses import JSONResponse
+
 @router.post("/ask")
 def ask_question(request: AskRequest):
     """
@@ -37,13 +39,51 @@ def ask_question(request: AskRequest):
     question = request.question.strip()
 
     if not question:
-        raise HTTPException(
+        return JSONResponse(
             status_code=400,
-            detail="Question cannot be empty"
+            content={
+                "success": False,
+                "error": {
+                    "code": "BAD_REQUEST",
+                    "message": "Question cannot be empty"
+                }
+            }
         )
 
     try:
         result = ask_database(question)
+
+        if not result.get("success"):
+            # It's a pipeline error (e.g. unsafe query, quota exhausted caught in agent)
+            error_msg = result.get("answer", "Unknown error")
+            error_code = "QUERY_ERROR"
+            status_code = 400
+
+            if "quota" in error_msg.lower() or "rate-limited" in error_msg.lower():
+                error_code = "AI_QUOTA_EXHAUSTED"
+                status_code = 429
+            elif "unsafe" in error_msg.lower() or "read-only" in error_msg.lower() or "not allowed" in error_msg.lower():
+                error_code = "UNSAFE_QUERY"
+            elif "unavailable" in error_msg.lower():
+                error_code = "AI_UNAVAILABLE"
+                status_code = 503
+            elif "api key" in error_msg.lower():
+                error_code = "AI_AUTH_ERROR"
+                status_code = 401
+
+            return JSONResponse(
+                status_code=status_code,
+                content={
+                    "success": False,
+                    "error": {
+                        "code": error_code,
+                        "message": error_msg
+                    },
+                    # Preserve the rest of the response structure just in case
+                    "sql": result.get("sql", ""),
+                    "summary": result.get("summary", {})
+                }
+            )
 
         logger.info(
             f"Query processed: '{question[:50]}...' | "
@@ -58,39 +98,34 @@ def ask_question(request: AskRequest):
     except Exception as e:
         logger.error(f"Unexpected error processing question: {e}", exc_info=True)
 
-        # Never expose raw tracebacks to the frontend
         error_str = str(e).lower()
+        error_code = "SERVER_ERROR"
 
         if "503" in error_str or "unavailable" in error_str or "demand" in error_str:
             user_message = "The AI service is temporarily experiencing high demand. Please try again in a few moments."
+            error_code = "AI_UNAVAILABLE"
         elif "429" in error_str or "quota" in error_str or "exhausted" in error_str:
             user_message = "AI request limit reached. Please wait a moment and try again."
+            error_code = "AI_QUOTA_EXHAUSTED"
         elif "api_key" in error_str or "api key" in error_str:
             user_message = "AI service configuration error. Please check the backend API key."
+            error_code = "AI_AUTH_ERROR"
         elif "timeout" in error_str:
             user_message = "The request timed out. Try a simpler question."
+            error_code = "TIMEOUT"
+        elif "unsafe" in error_str or "only read-only" in error_str:
+            user_message = "Only read-only analytical queries are allowed."
+            error_code = "UNSAFE_QUERY"
         else:
             user_message = "An error occurred while processing your question. Please try again."
 
-        # Return a structured error response (not an HTTP exception)
-        # so the frontend can still render it gracefully
-        return {
-            "success": False,
-            "answer": user_message,
-            "summary": {
-                "rows": 0,
-                "execution_time_ms": 0,
-                "total_time_ms": 0,
-                "from_cache": False,
-                "method": "error",
-            },
-            "sql": "",
-            "result": {
-                "columns": [],
-                "data": [],
-                "row_count": 0,
-            },
-            "chart": None,
-            "insights": [],
-            "tables_used": [],
-        }
+        return JSONResponse(
+            status_code=500,
+            content={
+                "success": False,
+                "error": {
+                    "code": error_code,
+                    "message": user_message
+                }
+            }
+        )

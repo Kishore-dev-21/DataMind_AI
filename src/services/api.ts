@@ -1,6 +1,10 @@
 import type { ChartPayload } from "@/types";
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+
+if (!API_URL) {
+  throw new Error("VITE_API_BASE_URL environment variable is not configured.");
+}
 
 // ==========================================
 // TYPES — matches backend response format
@@ -188,9 +192,14 @@ export async function askDataMind(
     }
 
     if (error instanceof TypeError && error.message.includes("fetch")) {
+      const isLocal = import.meta.env.DEV;
+      const msg = isLocal
+        ? "Unable to connect to the local DataMind AI backend."
+        : "Unable to connect to the DataMind AI server. Please try again.";
+
       throw new ApiError(
         0,
-        "Unable to connect to the DataMind AI backend. Make sure FastAPI is running at http://127.0.0.1:8000.",
+        msg,
         error.message,
         "connection"
       );
@@ -244,9 +253,14 @@ export async function uploadDataset(file: File): Promise<UploadResponse> {
     if (error instanceof ApiError) throw error;
 
     if (error instanceof TypeError && error.message.includes("fetch")) {
+      const isLocal = import.meta.env.DEV;
+      const msg = isLocal
+        ? "Unable to connect to the local backend. Make sure FastAPI is running."
+        : "Unable to connect to the server. Please try again.";
+
       throw new ApiError(
         0,
-        "Unable to connect to the backend. Make sure FastAPI is running.",
+        msg,
         error.message,
         "connection"
       );
@@ -305,5 +319,25 @@ export async function deleteDataset(tableName: string): Promise<void> {
       error instanceof Error ? error.message : String(error),
       "unknown"
     );
+  }
+}
+
+// ==========================================
+// HEALTH CHECK
+// ==========================================
+
+export async function checkHealth(): Promise<boolean> {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+    const response = await fetch(`${API_URL}/health`, {
+      signal: controller.signal,
+    });
+    
+    clearTimeout(timeoutId);
+    return response.ok;
+  } catch (error) {
+    return false;
   }
 }
