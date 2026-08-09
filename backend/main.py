@@ -120,7 +120,7 @@ def get_database_schema():
 @app.get("/")
 def root():
     return {
-        "success": True,
-        "message": "DataMind AI API is running",
-        "version": "2.0.0",
+        "message": "DataMind AI Backend is running",
+        "docs": "/docs",
+        "health": "/health"
     }
