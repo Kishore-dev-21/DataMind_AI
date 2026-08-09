@@ -347,6 +347,27 @@ This creates a unified analytical experience driving from real-world data direct
 
 ---
 
+## Architecture Diagrams
+
+These diagrams provide three different levels of understanding of the DataMind AI system.
+
+### 1. The Overall Workflow
+*What happens when the user asks a question?*
+
+![The Overall Workflow — DataMind AI](assets/diagrams/overall_workflow.jpg)
+
+### 2. LLM Agent Architecture
+*How does the LLM agent actually work internally?*
+
+![LLM Agent Architecture — DataMind AI](assets/diagrams/llm_agent_architecture.jpg)
+
+### 3. Project Architecture & API
+*How is the complete frontend/backend/API/deployment system connected?*
+
+![Project Architecture & API — DataMind AI](assets/diagrams/project_architecture.jpg)
+
+---
+
 ## Project Architecture & API
 
 ```text
