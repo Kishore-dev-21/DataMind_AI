@@ -12,12 +12,15 @@ import {
   Trash2,
   Volume2,
   Zap,
+  Wifi,
+  WifiOff,
 } from "lucide-react";
 import { useState } from "react";
 import { AppShell } from "@/components/layout/AppShell";
 import { useChatStore } from "@/stores/chat-store";
 import { BrandMark } from "@/components/layout/BrandMark";
-
+import { useEffect } from "react";
+import { checkHealth } from "@/services/api";
 export const Route = createFileRoute("/settings")({
   head: () => ({
     meta: [
@@ -130,6 +133,11 @@ function SettingsPage() {
   const [chartTheme, setChartTheme] = useState("emerald");
   const [animationsEnabled, setAnimationsEnabled] = useState(true);
   const [compactMode, setCompactMode] = useState(false);
+  const [backendOnline, setBackendOnline] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    checkHealth().then(setBackendOnline);
+  }, []);
   const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("medium");
   const [showTimestamps, setShowTimestamps] = useState(true);
 
@@ -423,14 +431,32 @@ function SettingsPage() {
                 <Row label="API Host" value="http://127.0.0.1:8000" />
               </div>
               <div className="mt-4 flex items-center justify-between border-t border-border/50 pt-3">
-                <button
-                  onClick={testConnection}
-                  disabled={testingPing}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background/50 px-3 py-1.5 text-xs font-medium transition-all hover:bg-accent active:scale-95 disabled:opacity-50"
-                >
-                  <Zap className="size-3.5 text-emerald-400" />
-                  {testingPing ? "Testing..." : "Test Backend Connection"}
-                </button>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={testConnection}
+                    disabled={testingPing}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background/50 px-3 py-1.5 text-xs font-medium transition-all hover:bg-accent active:scale-95 disabled:opacity-50"
+                  >
+                    <Zap className="size-3.5 text-emerald-400" />
+                    {testingPing ? "Testing..." : "Test Backend Connection"}
+                  </button>
+                  {backendOnline !== null && (
+                    <span
+                      title={backendOnline ? "Backend is connected" : "Backend is offline"}
+                      className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[11px] font-medium ${
+                        backendOnline
+                          ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+                          : "border-destructive/30 bg-destructive/10 text-destructive"
+                      }`}
+                    >
+                      {backendOnline ? (
+                        <><Wifi className="size-3" /> Connected</>
+                      ) : (
+                        <><WifiOff className="size-3" /> Offline</>
+                      )}
+                    </span>
+                  )}
+                </div>
                 {pingStatus && (
                   <span className="text-xs font-medium text-emerald-400">{pingStatus}</span>
                 )}
