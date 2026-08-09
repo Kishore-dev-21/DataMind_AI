@@ -15,7 +15,6 @@ export interface FormattedResponse {
   sql?: SqlPayload;
   table?: TablePayload;
   chart?: ChartPayload | null;
-  charts?: ChartPayload[];
   csvOnly?: boolean;
   insights?: string[];
 }
@@ -534,16 +533,11 @@ export function formatResponse(
     chart = null;
   }
 
-  const charts: ChartPayload[] = (response.charts && response.charts.length > 0)
-    ? response.charts
-    : (chart ? [chart] : []);
-
   return {
     content,
     sql,
     table,
     chart,
-    charts,
     csvOnly: response.csvOnly,
     insights,
   };

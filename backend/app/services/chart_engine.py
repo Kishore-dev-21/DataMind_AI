@@ -158,74 +158,10 @@ def decide_chart(data: list[dict], question: str, intent: dict) -> dict | None:
         }
     ]
     
-    primary_chart = {
+    return {
         "type": chart_type,
         "title": title,
         "xKey": x_key,
         "series": series,
         "data": cleaned_data
     }
-    
-    return primary_chart
-
-
-def decide_charts(data: list[dict], question: str, intent: dict) -> list[dict]:
-    """Generate multiple complementary charts for the dataset."""
-    if not data or len(data) <= 1:
-        return []
-        
-    columns = list(data[0].keys())
-    time_cols = []
-    numeric_cols = []
-    string_cols = []
-    
-    for col in columns:
-        values = [row.get(col) for row in data]
-        if is_time_column(col, values):
-            time_cols.append(col)
-        elif is_numeric_column(values):
-            numeric_cols.append(col)
-        elif is_string_column(values):
-            string_cols.append(col)
-            
-    if not numeric_cols:
-        return []
-        
-    cleaned_data = clean_data(data, numeric_cols)
-    charts = []
-    
-    primary = decide_chart(data, question, intent)
-    if primary:
-        charts.append(primary)
-        
-    x_key = string_cols[0] if string_cols else (time_cols[0] if time_cols else None)
-    
-    if x_key and len(numeric_cols) > 1:
-        for i, y_col in enumerate(numeric_cols[1:3], start=1):
-            sec_type = "bar" if primary and primary.get("type") != "bar" else "pie"
-            charts.append({
-                "type": sec_type,
-                "title": f"{y_col.replace('_', ' ').title()} by {x_key.replace('_', ' ').title()}",
-                "xKey": x_key,
-                "series": [{
-                    "key": y_col,
-                    "label": y_col.replace('_', ' ').title(),
-                    "color": CHART_COLORS[i % len(CHART_COLORS)]
-                }],
-                "data": cleaned_data
-            })
-    elif primary and string_cols and len(set(str(row.get(string_cols[0])) for row in cleaned_data)) <= 8:
-        if primary.get("type") == "bar":
-            charts.append({
-                "type": "pie",
-                "title": f"Distribution of {string_cols[0].replace('_', ' ').title()}",
-                "xKey": string_cols[0],
-                "series": [{
-                    "key": numeric_cols[0],
-                    "label": numeric_cols[0].replace('_', ' ').title(),
-                    "color": CHART_COLORS[1]
-                }],
-                "data": cleaned_data
-            })
-            
-    return charts

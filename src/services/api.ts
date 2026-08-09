@@ -39,7 +39,6 @@ export interface AskResponse {
     method?: "template" | "gemini" | "error";
   };
   chart?: ChartPayload | null;
-  charts?: ChartPayload[];
   csvOnly?: boolean;
   insights?: string[];
   tables_used?: string[];

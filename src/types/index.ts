@@ -47,7 +47,6 @@ export interface Message {
   sql?: SqlPayload;
   table?: TablePayload;
   chart?: ChartPayload;
-  charts?: ChartPayload[];
   mermaid?: { title: string; code: string };
   insights?: string[];
   error?: ErrorPayload;
