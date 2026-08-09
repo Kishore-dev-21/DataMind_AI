@@ -137,7 +137,10 @@ export function MessageBubble({
         )}
         {message.sql && <SQLCard payload={message.sql} />}
         {!message.csvOnly && message.table && <DataTableCard payload={message.table} />}
-        {!message.csvOnly && message.chart && <ChartCard payload={message.chart} />}
+        {!message.csvOnly && message.charts && message.charts.length > 0
+          ? message.charts.map((c, i) => <ChartCard key={i} payload={c} />)
+          : (!message.csvOnly && message.chart && <ChartCard payload={message.chart} />)
+        }
         {message.mermaid && (
           <MermaidCard title={message.mermaid.title} code={message.mermaid.code} />
         )}

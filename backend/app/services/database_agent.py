@@ -30,7 +30,7 @@ from app.services.sql_templates import match_template
 from app.services.cache import query_cache
 from app.services.result_analyzer import analyze_results
 from app.services.answer_generator import generate_answer
-from app.services.chart_engine import decide_chart
+from app.services.chart_engine import decide_chart, decide_charts
 from app.services.gemini_service import ask_gemini
 from app.tools.get_schema import get_schema
 from app.tools.execute_query import execute_query
@@ -337,14 +337,18 @@ Generate ONE valid SQLite SELECT query. Return ONLY the SQL query, no markdown.
     # ------------------------------------------
     # 7. CHART ENGINE → chart metadata
     # ------------------------------------------
+    charts = []
     try:
         if intent.get("csv_only"):
             chart = None
+            charts = []
         else:
             chart = decide_chart(data, user_question, intent)
+            charts = decide_charts(data, user_question, intent)
     except Exception as e:
         logger.warning(f"Chart engine failed: {e}")
         chart = None
+        charts = []
 
     # ------------------------------------------
     # 8. BUILD RESPONSE
@@ -368,6 +372,7 @@ Generate ONE valid SQLite SELECT query. Return ONLY the SQL query, no markdown.
             "row_count": row_count,
         },
         "chart": chart,
+        "charts": charts,
         "csvOnly": intent.get("csv_only", False),
         "insights": insights,
         "tables_used": tables_used,
