@@ -29,40 +29,7 @@ The system understands the user's request, uses the available database schema, g
 
 ### The Overall Workflow
 
-```text
-Natural Language Question
-|
-v
-Gemini AI Layer
-|
-v
-Schema Understanding
-|
-v
-SQL Generation
-|
-v
-SQL Validation
-|
-v
-Secure Query Execution
-|
-v
-Actual Dataset
-|
-v
-Query Results
-|
-+-------------------+
-|                   |
-v                   v
-Data Visualization  Data Analysis
-|                   |
-+---------+---------+
-          |
-          v
-Conversational Answer
-```
+![The Overall Workflow — DataMind AI](assets/diagrams/overall_workflow.jpg)``
 
 ---
 
@@ -241,33 +208,7 @@ DataMind AI uses Recharts as its primary visualization engine. Supported visuali
 
 DataMind AI follows an LLM-powered architecture that connects natural-language interaction with database operations and visualization.
 
-```text
-User 
- |
- v
-React Chat Interface 
- |
- v
-FastAPI API 
- |
- v
-Gemini AI Layer 
- +---------------+---------------+
- |               |               |
- v               v               v
-get_schema() execute_query() explain_data()
- +-------+-------+               |
- |               |               |
- v               v               |
-generate_chart() generate_flowchart()  |
- +-------+-------+               |
- |                               |
- v                               |
-SQLite Database <----------------+
- |
- v
-Brazilian E-Commerce Dataset
-```
+![LLM Agent Architecture — DataMind AI](assets/diagrams/llm_agent_architecture.jpg)``
 
 ### Agent Tools
 * **get_schema**: Retrieves the database schema including tables, columns, data types, and relationships.
@@ -347,68 +288,9 @@ This creates a unified analytical experience driving from real-world data direct
 
 ---
 
-## Architecture Diagrams
-
-These diagrams provide three different levels of understanding of the DataMind AI system.
-
-### 1. The Overall Workflow
-*What happens when the user asks a question?*
-
-![The Overall Workflow — DataMind AI](assets/diagrams/overall_workflow.jpg)
-
-### 2. LLM Agent Architecture
-*How does the LLM agent actually work internally?*
-
-![LLM Agent Architecture — DataMind AI](assets/diagrams/llm_agent_architecture.jpg)
-
-### 3. Project Architecture & API
-*How is the complete frontend/backend/API/deployment system connected?*
-
-![Project Architecture & API — DataMind AI](assets/diagrams/project_architecture.jpg)
-
----
-
 ## Project Architecture & API
 
-```text
-+----------------------+
-|        User          |
-+----------+-----------+
-           |
-           v
-+----------------------+
-|    React Frontend    |
-|   Chat + Dashboard   |
-+----------+-----------+
-           |
-           v
-+----------------------+
-|     FastAPI API      |
-+----------+-----------+
-           |
-+----------+-----------+
-|          |           |
-v          v           |
-+-------------+  +-------------+
-|  Gemini AI  |  |    SQLite   |
-|    Layer    |  |   Database  |
-+------+------+  +------+------+
-       |                |
-       v                |
-Brazilian E-Commerce    |
-  Public Dataset        |
-       |                |
-+----------+----------+ |
-           v            |
-+----------------------+ |
-|  Results & Insights  | <
-+----------+-----------+
-           |
-+----------+-----------+
-|          |           |
-v          v           |
-Visualizations   AI Insights
-```
+![Project Architecture & API — DataMind AI](assets/diagrams/project_architecture.jpg)``
 
 **API Architecture**
 * `POST /api/ask`: Main conversational endpoint handling NLP, Schema Context, SQL Generation, Validation, and Execution.
