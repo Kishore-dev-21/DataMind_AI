@@ -404,9 +404,6 @@ uvicorn backend.main:app --reload
 ## Future Enhancements
 * Multi-database connectivity (PostgreSQL and MySQL support)
 * Advanced LLM agent orchestration
-* Voice-based database queries
-* CSV and PDF export
-* Query history and favorites
 * Custom dashboard builder
 * Collaborative visualization sharing
 * Advanced anomaly detection
