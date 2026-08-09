@@ -1,10 +1,20 @@
 import type { ChartPayload } from "@/types";
 
-const API_URL = import.meta.env.VITE_API_BASE_URL;
+const _envUrl = import.meta.env.VITE_API_BASE_URL;
 
-if (!API_URL) {
-  throw new Error("VITE_API_BASE_URL environment variable is not configured.");
-}
+// In development, fall back to local backend automatically.
+// In production, warn loudly if the env var is missing.
+const API_URL: string = _envUrl
+  ? _envUrl
+  : import.meta.env.DEV
+  ? "http://127.0.0.1:8000"
+  : (() => {
+      console.error(
+        "[DataMind] VITE_API_BASE_URL is not set. " +
+        "Add it to your Vercel environment variables."
+      );
+      return "";
+    })();
 
 // ==========================================
 // TYPES — matches backend response format

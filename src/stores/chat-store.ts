@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 import type { Conversation, Message, ErrorPayload } from "@/types";
 import { processSteps, titleFor } from "@/lib/ai-engine";
 import { formatResponse } from "@/lib/response-formatter";
@@ -560,6 +560,13 @@ export const useChatStore = create<ChatState>()(
     },
     {
       name: "datamind-chat-storage",
+      storage: createJSONStorage(() => 
+        typeof window !== "undefined" ? window.localStorage : {
+          getItem: () => null,
+          setItem: () => {},
+          removeItem: () => {},
+        } as any
+      ),
 
       partialize: (state) => ({
         conversations: state.conversations.map((c) => ({
