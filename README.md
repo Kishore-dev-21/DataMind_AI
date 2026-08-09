@@ -12,7 +12,11 @@ DataMind AI is built around the Brazilian E-Commerce Public Dataset (Olist), a r
 
 ## Project Demo Video
 
-[![DataMind AI Prototype Demonstration](https://img.youtube.com/vi/Qu4EPjvnV_E/maxresdefault.jpg)](https://youtu.be/Qu4EPjvnV_E "Watch DataMind AI Demo Video on YouTube")
+[![YouTube](https://img.shields.io/badge/YouTube-Watch%20Demo%20Video-red?style=for-the-badge&logo=youtube)](https://youtu.be/Qu4EPjvnV_E)
+
+**Direct Link:** [https://youtu.be/Qu4EPjvnV_E](https://youtu.be/Qu4EPjvnV_E)
+
+[![DataMind AI Prototype Demonstration](https://img.youtube.com/vi/Qu4EPjvnV_E/maxresdefault.jpg)](https://youtu.be/Qu4EPjvnV_E "Click to watch DataMind AI Prototype Demonstration on YouTube")
 
 ---
 
