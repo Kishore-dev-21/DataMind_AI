@@ -58,6 +58,9 @@ export function ChatInput({ onSend, onStop, isStreaming }: Props) {
     }
   };
 
+  const baseValueRef = useRef("");
+  const latestValueRef = useRef("");
+
   const startVoice = () => {
     const win = window as unknown as IWindow;
     const SpeechRecognition = win.SpeechRecognition || win.webkitSpeechRecognition;
@@ -69,6 +72,9 @@ export function ChatInput({ onSend, onStop, isStreaming }: Props) {
     }
 
     try {
+      baseValueRef.current = value;
+      latestValueRef.current = value;
+
       const recognition = new SpeechRecognition();
       recognition.continuous = true;
       recognition.interimResults = true;
@@ -80,17 +86,17 @@ export function ChatInput({ onSend, onStop, isStreaming }: Props) {
       };
 
       recognition.onresult = (event: any) => {
-        let transcript = "";
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          transcript += event.results[i][0].transcript;
+        let sessionTranscript = "";
+        for (let i = 0; i < event.results.length; i++) {
+          sessionTranscript += event.results[i][0].transcript;
         }
-        if (transcript.trim()) {
-          setValue((prev) => {
-            // Append transcribed text cleanly
-            const base = prev.trim();
-            return base ? `${base} ${transcript.trim()}` : transcript.trim();
-          });
-        }
+
+        const base = baseValueRef.current.trim();
+        const spoken = sessionTranscript.trim();
+        const nextValue = base ? `${base} ${spoken}` : spoken;
+
+        latestValueRef.current = nextValue;
+        setValue(nextValue);
       };
 
       recognition.onerror = (event: any) => {
@@ -104,8 +110,10 @@ export function ChatInput({ onSend, onStop, isStreaming }: Props) {
 
       recognition.onend = () => {
         setListening(false);
-        if (settings?.autoSendVoice && value.trim()) {
-          submit();
+        if (settings?.autoSendVoice && latestValueRef.current.trim()) {
+          onSend(latestValueRef.current.trim());
+          setValue("");
+          latestValueRef.current = "";
         }
       };
 
