@@ -1,306 +1,533 @@
-﻿# DataMind AI
+# DataMind AI
 
-> **Conversational Database Intelligence Platform**  
-> Ask questions in plain English and instantly get SQL, charts, and insights from the Olist Brazilian E-Commerce dataset.
+**LLM-Powered Conversational Database Intelligence & Analytics Platform**
 
----
+DataMind AI is an intelligent conversational data analytics platform that enables users to interact with a real-world e-commerce database using natural language instead of manually writing SQL queries.
 
-## 🏗 Architecture
+The platform combines Google Gemini, FastAPI, SQLite, React, Recharts, Mermaid, and an interactive analytics dashboard to transform natural-language questions into database queries, retrieve actual data, generate meaningful visualizations, and provide understandable insights.
 
-`
-                        INTERNET
-                           |
-                           v
-                 +--------------------+
-                 |  Vercel Frontend   |
-                 |  React + Vite + TS |
-                 +--------------------+
-                           |
-                           | HTTPS REST API
-                           |
-                           v
-                 +--------------------+
-                 |   FastAPI Backend  |
-                 |   Cloud Hosted     |
-                 +--------------------+
-                      |          |
-                      |          |
-                      v          v
-                Gemini API     SQLite
-                               Olist DB
+DataMind AI is built around the Brazilian E-Commerce Public Dataset (Olist), a real-world Brazilian e-commerce dataset publicly available through Kaggle.
 
-> The Gemini API key is EXCLUSIVELY held by the backend server.
-> It is NEVER exposed to the browser or frontend bundle.
-`
+**Live Demo:** [https://data-mind-ai-eken.vercel.app/](https://data-mind-ai-eken.vercel.app/)
 
 ---
 
-## ✨ Features
+## About the Project
 
-- **Conversational AI** — Natural language → SQL via Google Gemini
-- **Live Query Execution** — Queries run against the real Olist SQLite database
-- **Automatic Chart Generation** — Bar, Line, Area, Pie, Scatter charts
-- **SQL Transparency** — Every AI-generated query is shown to the user
-- **Data Explorer** — Browse tables, columns, and schemas
-- **Dashboard Pages** — Pre-built analytics for Orders, Revenue, Products, Customers
-- **ER Diagrams** — Mermaid-powered schema visualizations
-- **Business Insights** — AI-generated summaries alongside results
-- **Backend Health Indicator** — Live "Connected / Offline" badge in the UI
+Traditional database analysis requires users to understand SQL, database schemas, table relationships, and data visualization techniques. This creates a barrier for users who need insights from data but do not have extensive technical knowledge.
 
----
+DataMind AI addresses this problem through a conversational AI interface combined with a comprehensive analytics dashboard. Users can ask questions such as:
 
-## 🛠 Tech Stack
+* What are the top 5 product categories by revenue?
+* Show me the monthly revenue trend.
+* Which customers have placed the most orders?
+* Which payment method is most commonly used?
+* Which states generate the highest revenue?
+* Draw the ER diagram for this database.
 
-| Layer       | Technology                                |
-|-------------|-------------------------------------------|
-| Frontend    | React 19, TypeScript, Vite, TanStack Router |
-| Styling     | Tailwind CSS, shadcn/ui, Framer Motion    |
-| Charts      | Recharts                                  |
-| Backend     | Python 3.11, FastAPI, Uvicorn             |
-| AI          | Google Gemini API (server-side only)      |
-| Database    | SQLite (Olist E-Commerce Dataset)         |
-| Frontend Deploy | Vercel                               |
-| Backend Deploy  | Render (or Railway / Fly.io)         |
+The system understands the user's request, uses the available database schema, generates an appropriate SQL query, executes the query through a secure read-only database layer, presents the results through suitable visualizations, and provides natural-language insights.
 
----
+### The Overall Workflow
 
-## 📦 Dataset
-
-**Olist Brazilian E-Commerce Public Dataset**
-
-- 99,441 orders
-- 100K+ payment records
-- 32K+ products
-- 96K+ customers
-- 3,095 sellers
-- Period: September 2016 – August 2018
-
----
-
-## 📁 Project Structure
-
-`
-datamind-ai/
-├── backend/                   # FastAPI application
-│   ├── main.py               # App entry point + CORS + health
-│   ├── requirements.txt      # Python dependencies
-│   ├── render.yaml           # Render deployment config
-│   ├── .env.example          # Template (no real secrets)
-│   ├── app/
-│   │   ├── api/ask.py        # POST /api/ask endpoint
-│   │   ├── services/
-│   │   │   ├── gemini_service.py    # Gemini API calls
-│   │   │   └── database_agent.py   # AI pipeline
-│   │   └── tools/
-│   │       └── execute_query.py    # SQLite query runner
-│   └── database/
-│       └── ecommerce.db      # Olist SQLite database
-│
-├── src/                       # React frontend
-│   ├── services/api.ts       # Centralized API client
-│   ├── components/           # UI components
-│   ├── routes/               # TanStack Router pages
-│   └── stores/               # Zustand state
-│
-├── vercel.json               # Vercel SPA config
-├── .env.example              # Frontend env template
-└── README.md
-`
+```text
+Natural Language Question
+|
+v
+Gemini AI Layer
+|
+v
+Schema Understanding
+|
+v
+SQL Generation
+|
+v
+SQL Validation
+|
+v
+Secure Query Execution
+|
+v
+Actual Dataset
+|
+v
+Query Results
+|
++-------------------+
+|                   |
+v                   v
+Data Visualization  Data Analysis
+|                   |
++---------+---------+
+          |
+          v
+Conversational Answer
+```
 
 ---
 
-## 🚀 Local Development
+## Dataset
 
-### 1. Backend Setup
+### Brazilian E-Commerce Public Dataset
 
-`ash
-cd backend
+DataMind AI uses the Brazilian E-Commerce Public Dataset by Olist, a real-world e-commerce dataset publicly available through Kaggle. The dataset contains interconnected information related to Brazilian online commerce, including:
 
-# Create virtual environment
-python -m venv venv
+* Customers
+* Orders
+* Order items
+* Products
+* Sellers
+* Payments
+* Reviews
+* Product categories
+* Customer locations
+* Seller locations
+* Delivery information
+* Product dimensions
+* Product weight
+* Freight values
 
-# Activate (Windows)
-venv\Scripts\activate
+The dataset is loaded into a SQLite database and serves as the primary source for the application's analytical queries and dashboard visualizations.
 
-# Activate (macOS/Linux)
-source venv/bin/activate
+### Data-Driven Principle
 
-# Install dependencies
-pip install -r requirements.txt
+DataMind AI follows a simple principle:
 
-# Configure environment
-cp .env.example .env
-# Edit .env and fill in GEMINI_API_KEY
-`
+```text
+User Question -> Database Query -> Actual Dataset Records -> Result -> Visualization + Explanation
+```
 
-Edit ackend/.env:
-`
-GEMINI_API_KEY=your_actual_key_here
-GEMINI_MODEL=gemini-3.5-flash
-ALLOWED_ORIGINS=http://localhost:5173,http://localhost:8080
-`
+All analytical visualizations and metrics are computed from the actual records contained in the Brazilian E-Commerce Public Dataset loaded into the application's SQLite database.
 
-`ash
-# Start backend
-uvicorn main:app --reload --port 8000
-`
+### Dataset-Focused Conversational AI
 
-Backend available at: http://127.0.0.1:8000  
-Swagger UI at: http://127.0.0.1:8000/docs
+DataMind AI is intentionally designed to answer questions related to the available e-commerce dataset. Examples include:
+
+* How many orders were delivered?
+* What are the top product categories by revenue?
+* Which payment method is most commonly used?
+* What is the average delivery time?
+* Which states generate the highest revenue?
+* Which categories have the highest review scores?
+* Show me the monthly revenue trend.
+* Which sellers have the highest sales?
+* What is the average order value?
+* Which products have the highest freight cost?
+
+The AI uses the database schema and executes queries against the actual stored dataset to retrieve relevant information.
+
+### Dataset Boundary
+
+DataMind AI is not intended to be a general-purpose ChatGPT system. Its primary purpose is to provide reliable answers based on the connected Brazilian E-Commerce Public Dataset.
+
+For example, general questions such as "Tell me a joke", "What is the capital of France?", or "Explain quantum physics" are outside the intended database-analysis scope. The system is designed to focus on the information available in the connected dataset rather than inventing unrelated business information.
+
+This dataset-grounded approach helps maintain a clear boundary between:
+
+```text
+Available Database Information -> DataMind AI -> Data-Driven Answer
+```
 
 ---
 
-### 2. Frontend Setup
+## Key Features
 
-`ash
-# From project root
+### 1. Conversational Database Interaction
+Users can interact with the database using natural language without manually writing SQL queries. The conversational interface supports analytical questions and follow-up questions within the session.
 
-# Install dependencies
+### 2. Natural Language to SQL
+Google Gemini interprets natural-language questions and generates SQL queries based on the actual database schema.
+
+**Example:**
+* User: Show the top 5 product categories by revenue.
+* Gemini: Understands the question and database schema.
+* SQL: Generated according to the available tables and columns.
+* SQLite: Executes the validated read-only query.
+* DataMind AI: Displays the result, visualization, and explanation.
+
+### 3. Database Schema Understanding
+The backend provides the AI layer with information about the database structure, including:
+* Table names
+* Column names
+* Data types
+* Relationships
+* Available fields
+
+### 4. Secure Read-Only SQL Execution
+AI-generated SQL is executed through a controlled database layer. The SQLite database is accessed in read-only mode to reduce the risk of destructive operations. The execution layer is designed to prevent operations such as DROP, DELETE, UPDATE, INSERT, ALTER, and CREATE.
+
+### 5. Dynamic Data Visualization
+DataMind AI dynamically presents analytical results through interactive charts. Supported chart types include Bar charts, Line charts, Area charts, Pie charts, and Scatter plots. The visualization engine is powered by Recharts.
+
+### 6. AI-Powered Data Insights
+DataMind AI does not simply return raw numbers. The platform can analyze query results and provide human-readable insights explaining important trends, comparisons, patterns, dominant categories, performance indicators, and business observations.
+
+### 7. ER Diagram Generation
+The platform can analyze the database structure and generate visual representations of relationships between entities using Mermaid. This allows users to understand complex database structures without manually inspecting every table.
+
+### 8. Interactive Data Explorer
+Users can directly inspect the underlying database records through interactive tables. Supported capabilities include pagination, sorting, filtering, multi-table viewing, and structured data inspection.
+
+### 9. Comprehensive Analytics Dashboard
+DataMind AI provides a dedicated analytics dashboard containing multiple sections for exploring the Brazilian E-Commerce Public Dataset. Dashboard sections include Overview, Orders, Revenue, Products, Customers, Data Explorer, EDA, and Data Quality.
+
+---
+
+## Analytics Dashboard
+
+### 1. Overview (`/dashboard`)
+The Overview dashboard provides a high-level summary of business performance.
+* **KPI Cards**: Displays important metrics such as Total Orders, Total Revenue, Total Customers, Average Order Value, Delivery Rate, Total Products, Total Sellers, and Average Review Score.
+* **Monthly Revenue Trend**: An interactive area chart displays month-over-month revenue trends to help users identify revenue growth, decline, and seasonal patterns.
+* **Order Volume & Status**: Visualizations showing order volume and order-status distribution (Delivered, Shipped, Canceled, etc.).
+* **AI Key Insights**: A dedicated AI-generated insights section analyzes the available business trends and provides natural-language observations.
+* **Ask AI**: A direct entry point allows users to move from dashboard analytics to conversational data exploration.
+
+### 2. Orders Analytics (`/dashboard/orders`)
+The Orders dashboard focuses on order timing, delivery performance, and logistics.
+* **Order Timing Analytics**: Analyzes order volume according to day of the week and hour of the day.
+* **Delivery Performance**: Compares actual delivery time vs. estimated delivery time to identify potential logistical bottlenecks.
+* **Logistics KPIs**: Metrics include shipping information, freight values, and delivery success.
+
+### 3. Revenue Analytics (`/dashboard/revenue`)
+The Revenue dashboard focuses on financial performance and payment analytics.
+* **Payment Methods**: Visualizations for payment distribution (Credit Card, Boleto, Voucher, Debit Card).
+* **Installment Analytics**: Analyzes customer installment behavior and payment patterns.
+* **Geographic Revenue**: Revenue explored geographically by State or City.
+
+### 4. Products Analytics (`/dashboard/products`)
+The Products dashboard focuses on product and category performance.
+* **Top Categories**: Horizontal bar charts display the highest-performing product categories.
+* **Category Volume vs Value**: Compares product volume versus revenue generated.
+* **Product Dimensions and Weight**: Analyzes physical characteristics against freight value and sales.
+
+### 5. Customer Analytics (`/dashboard/customers`)
+The Customers dashboard provides customer-level and geographic analysis.
+* **Geographic Distribution**: Customer distribution by State and City.
+* **Customer Lifetime Value**: Estimates customer value where supported by the dataset.
+* **Review Analysis**: Correlates review scores with product categories, sellers, and customer behavior.
+
+### 6. Data Explorer (`/dashboard/explorer`)
+Provides direct access to the underlying database records (orders, customers, products, payments, sellers, reviews, order_items). Offers pagination, sorting, filtering, and structured data inspection.
+
+### 7. Exploratory Data Analysis (`/dashboard/eda`)
+Provides statistical analysis of the dataset.
+* **Correlation Matrices**: Investigates relationships between variables (Price, Freight Value, Review Score, etc.).
+* **Distribution Histograms**: Visualizes the distribution of order values, prices, freight values, etc.
+* **Outlier Detection**: Helps identify unusual values and potential anomalies within numerical data.
+
+### 8. Data Quality (`/dashboard/quality`)
+Provides information about dataset integrity and health.
+* **Null Value Tracking**: Identifies missing values across important columns.
+* **Data Freshness**: Displays information about the latest available records.
+* **Schema Validation**: Checks whether the dataset follows the expected schema and data types before AI processing.
+
+---
+
+## Visualization Engine
+
+DataMind AI uses Recharts as its primary visualization engine. Supported visualization types include Area charts, Bar charts, Line charts, Pie charts, and Scatter plots.
+
+**Visualization Features:**
+* **Responsive Charts**: Automatically adapt to different screen sizes.
+* **Custom Tooltips**: Interactive tooltips for inspecting individual data values.
+* **Hover Effects**: Interactive hover behavior improves readability.
+* **Fullscreen Expansion**: Charts can be expanded for detailed analysis and presentations.
+* **Intelligent X-Axis Handling**: Includes X-axis label deduplication logic to reduce overlapping labels for larger datasets.
+
+---
+
+## LLM Agent Architecture
+
+DataMind AI follows an LLM-powered architecture that connects natural-language interaction with database operations and visualization.
+
+```text
+User 
+ |
+ v
+React Chat Interface 
+ |
+ v
+FastAPI API 
+ |
+ v
+Gemini AI Layer 
+ +---------------+---------------+
+ |               |               |
+ v               v               v
+get_schema() execute_query() explain_data()
+ +-------+-------+               |
+ |               |               |
+ v               v               |
+generate_chart() generate_flowchart()  |
+ +-------+-------+               |
+ |                               |
+ v                               |
+SQLite Database <----------------+
+ |
+ v
+Brazilian E-Commerce Dataset
+```
+
+### Agent Tools
+* **get_schema**: Retrieves the database schema including tables, columns, data types, and relationships.
+* **execute_query**: Executes validated SQL queries against the SQLite database in a controlled, read-only mode.
+* **generate_chart**: Generates visual representations from structured query results.
+* **generate_flowchart**: Generates database and process visualizations using Mermaid (ER diagrams, process flows).
+* **explain_data**: Analyzes query results and produces natural-language explanations and insights.
+
+### Example AI Workflow
+For a question such as: "Show me the top 5 product categories by revenue."
+1. Receive the user's question
+2. Understand the user's intent
+3. Inspect the database schema
+4. Generate SQL
+5. Validate the SQL
+6. Execute the query
+7. Retrieve actual dataset results
+8. Generate a suitable visualization
+9. Analyze the results
+10. Return the final conversational response (Query Result + Interactive Visualization + Data Table + AI-Generated Insight)
+
+---
+
+## Dashboard and AI Integration
+
+DataMind AI provides two complementary ways to interact with the same underlying dataset:
+
+* **Conversational Analytics**: Users ask natural-language questions and the AI retrieves relevant data and explains the result.
+* **Visual Analytics**: Users can directly explore predefined dashboards (Overview, Orders, Revenue, Products, Customers, Data Explorer, EDA, Data Quality).
+
+This creates a unified analytical experience driving from real-world data directly to data-driven insights.
+
+---
+
+## Technology Stack
+
+### Frontend
+* React 19
+* TypeScript
+* Vite
+* Tailwind CSS
+* TanStack Router
+* TanStack Query
+* Zustand
+* Recharts
+* Mermaid
+* Framer Motion
+* Radix UI
+* Lucide React
+* React Markdown
+
+### Backend
+* Python
+* FastAPI
+* Uvicorn
+* Pandas
+* NumPy
+* SQLAlchemy
+* SQLite3
+* Python-dotenv
+
+### Artificial Intelligence
+* Google Gemini
+* Google GenAI SDK
+* Natural Language Understanding
+* Natural Language to SQL
+* AI-assisted Data Analysis
+* AI-generated Insights
+
+### Database
+* SQLite
+* Brazilian E-Commerce Public Dataset (Olist)
+
+### Deployment
+* Vercel (FastAPI backend deployment & Frontend routing)
+* SQLite database
+
+---
+
+## Project Architecture & API
+
+```text
++----------------------+
+|        User          |
++----------+-----------+
+           |
+           v
++----------------------+
+|    React Frontend    |
+|   Chat + Dashboard   |
++----------+-----------+
+           |
+           v
++----------------------+
+|     FastAPI API      |
++----------+-----------+
+           |
++----------+-----------+
+|          |           |
+v          v           |
++-------------+  +-------------+
+|  Gemini AI  |  |    SQLite   |
+|    Layer    |  |   Database  |
++------+------+  +------+------+
+       |                |
+       v                |
+Brazilian E-Commerce    |
+  Public Dataset        |
+       |                |
++----------+----------+ |
+           v            |
++----------------------+ |
+|  Results & Insights  | <
++----------+-----------+
+           |
++----------+-----------+
+|          |           |
+v          v           |
+Visualizations   AI Insights
+```
+
+**API Architecture**
+* `POST /api/ask`: Main conversational endpoint handling NLP, Schema Context, SQL Generation, Validation, and Execution.
+* `POST /api/upload`: Handles dataset uploads and processing.
+* `GET /health`: Provides backend health and connectivity information.
+
+---
+
+## Security
+
+DataMind AI treats AI-generated SQL as untrusted input. The database layer provides controlled query execution and read-only database access to reduce the risk of destructive database operations. 
+
+Sensitive credentials are stored using environment variables rather than directly inside the source code. Actual API keys must never be committed to GitHub.
+
+---
+
+## Data Reliability Principle
+
+DataMind AI follows a dataset-grounded approach to analytical responses. If there is no relevant dataset information, there is no data-driven answer. The platform is designed to ground analytical responses in the information available in the connected database.
+
+All analytical visualizations and metrics are computed from the actual records contained in the Brazilian E-Commerce Public Dataset loaded into the application's SQLite database, providing transparency from Dataset to Database to SQL Query to Result to Visualization to AI Explanation.
+
+---
+
+## Getting Started
+
+### Prerequisites
+* Node.js
+* Python 3.x
+* Git
+* Google Gemini API Key
+
+### Clone the Repository
+```bash
+git clone <YOUR_GITHUB_REPOSITORY_URL>
+cd DataMind_AI
+```
+
+### Frontend Setup
+```bash
 npm install
-
-# Configure environment
-cp .env.example .env.local
-# .env.local already has: VITE_API_BASE_URL=http://127.0.0.1:8000
-
-# Start dev server
+```
+Create the frontend environment configuration:
+```env
+VITE_API_BASE_URL=<YOUR_BACKEND_URL>
+```
+Start the frontend:
+```bash
 npm run dev
-`
+```
 
-Frontend available at: http://localhost:5173
-
----
-
-## 🔑 Environment Variables
-
-### Backend (ackend/.env)
-
-| Variable          | Description                                    | Required |
-|-------------------|------------------------------------------------|----------|
-| GEMINI_API_KEY  | Your Google Gemini API key                     | ✅ Yes   |
-| GEMINI_MODEL    | Gemini model (default: gemini-3.5-flash)     | Optional |
-| ALLOWED_ORIGINS | Comma-separated list of allowed CORS origins   | Optional |
-
-### Frontend (Vercel Environment Variables or .env.local)
-
-| Variable            | Description                         | Required |
-|---------------------|-------------------------------------|----------|
-| VITE_API_BASE_URL | URL of the deployed FastAPI backend | ✅ Yes   |
-
-> ⚠️ **NEVER** set GEMINI_API_KEY as a VITE_ variable — it will be exposed in the browser bundle.
-
----
-
-## 📡 API Endpoints
-
-### GET /
-Returns API status.
-
-### GET /health
-Health check for deployment validation.
-`json
-{ "status": "healthy", "service": "DataMind AI Backend" }
-`
-
-### POST /api/ask
-Ask a natural-language question about the database.
-
-**Request:**
-`json
-{ "question": "Show the total payment value by payment type" }
-`
-
-**Success Response:**
-`json
-{
-  "success": true,
-  "answer": "The total payment value by type is...",
-  "sql": "SELECT payment_type, SUM(payment_value) ...",
-  "result": {
-    "columns": ["payment_type", "total"],
-    "data": [...],
-    "row_count": 4
-  },
-  "chart": { "type": "bar", ... },
-  "summary": { "method": "gemini", "total_time_ms": 1240 }
-}
-`
-
-**Error Response:**
-`json
-{
-  "success": false,
-  "error": {
-    "code": "AI_QUOTA_EXHAUSTED",
-    "message": "AI request limit reached. Please wait a moment and try again."
-  }
-}
-`
-
-### GET /docs
-Swagger UI (interactive API documentation).
-
-### GET /api/schema
-Returns the full database schema used by the AI agent.
+### Backend Setup
+Create a Python virtual environment:
+```bash
+python -m venv venv
+```
+Windows:
+```bash
+venv\Scripts\activate
+```
+Install dependencies:
+```bash
+pip install -r backend/requirements.txt
+```
+Configure the Gemini API key:
+```env
+GEMINI_API_KEY=<YOUR_GEMINI_API_KEY>
+```
+Start the FastAPI server:
+```bash
+uvicorn backend.main:app --reload
+```
 
 ---
 
-## ☁️ Deployment
+## Hackathon Context
 
-### Backend — Render
+* **Event**: iTech AI Innovation Hackathon 2026
+* **Challenge**: Building Intelligent LLM Agents for Database Interaction & Visualization
+* **Institution**: Sri Sairam Engineering College
+* **Hackathon Dates**: 1 August 2026 – 7 August 2026
+* **Team Size**: 4 Members
 
-1. Push the repository to GitHub.
-2. Go to [render.com](https://render.com) → New Web Service → Connect your repo.
-3. Set **Root Directory** to ackend.
-4. Render auto-detects ender.yaml and configures the service.
-5. Add environment variables in the Render dashboard:
-   - GEMINI_API_KEY = your key
-   - GEMINI_MODEL = gemini-3.5-flash
-   - ALLOWED_ORIGINS = https://YOUR-PROJECT.vercel.app
-6. Deploy. Your backend URL will be: https://datamind-ai-backend.onrender.com
+### Problem Statement Alignment
 
-### Frontend — Vercel
-
-1. Go to [vercel.com](https://vercel.com) → New Project → Import your repo.
-2. Framework Preset: **Other** (Vite).
-3. Build Command: 
-pm run build
-4. Output Directory: .output/public
-5. Add Environment Variable:
-   - VITE_API_BASE_URL = https://datamind-ai-backend.onrender.com
-6. Deploy.
-
-**Important:** After getting both URLs, update ALLOWED_ORIGINS on Render to include your Vercel URL.
-
----
-
-## 🔒 Security
-
-- ✅ Gemini API key is server-side only — never in the browser
-- ✅ .env is in .gitignore — never committed
-- ✅ Only SELECT and WITH SQL queries are allowed — no destructive operations
-- ✅ CORS is configured to only accept requests from trusted origins
-- ✅ Production uses HTTPS for both frontend (Vercel) and backend (Render)
-- ✅ No credentials appear in Swagger examples
-- ✅ User input is validated before processing
+| Hackathon Requirement | DataMind AI Implementation |
+|---|---|
+| Chat Interface | React-based conversational UI |
+| Natural Language Understanding | Google Gemini |
+| Database Integration | SQLite |
+| Schema Discovery | Database schema contextualization |
+| SQL Query Execution | Secure read-only SQL execution |
+| Dynamic Visualization | Recharts (Bar, Line, Pie, Scatter) |
+| ER Diagram | Mermaid |
+| Process Visualization | Mermaid-based visualization |
+| Data Explanation | AI-generated insights |
+| Multi-turn Conversation | Persistent conversational state |
+| Error Handling | Backend and query error handling |
+| SQL Transparency | Generated SQL can be displayed |
+| Analytics Dashboard | Multiple dedicated dashboard modules |
+| Data Explorer | Interactive database tables |
+| Exploratory Data Analysis | Correlation, distributions, outliers |
+| Data Quality | Null values, freshness, schema validation |
 
 ---
 
-## 📸 Screenshots
-
-*Add screenshots here after deployment.*
+## Future Enhancements
+* Multi-database connectivity (PostgreSQL and MySQL support)
+* Advanced LLM agent orchestration
+* Voice-based database queries
+* CSV and PDF export
+* Query history and favorites
+* Custom dashboard builder
+* Collaborative visualization sharing
+* Advanced anomaly detection
+* Automated insight generation
+* Role-based access control
+* Real-time streaming responses
 
 ---
 
-## 🔗 Links
+## Team
 
-- **Frontend (Vercel):** https://YOUR-PROJECT.vercel.app
-- **Backend (Render):** https://datamind-ai-backend.onrender.com
-- **Swagger UI:** https://datamind-ai-backend.onrender.com/docs
-- **Health Check:** https://datamind-ai-backend.onrender.com/health
-- **GitHub:** https://github.com/Kishore-dev-21/DataMind_AI
+**DataMind AI Team**
+
+| No. | Student Name | Student ID | Department | Year |
+|---|---|---|---|---|
+| 1 | KISHORE S | SEC24IT035 | Information Technology | 3rd Year |
+| 2 | DIVYASREE D | SEC24IT061 | Information Technology | 3rd Year |
+| 3 | SIVAPERUMAL D | SEC24IT055 | Information Technology | 3rd Year |
+| 4 | DHARSHINI S | SEC24IT033 | Information Technology | 3rd Year |
 
 ---
 
-## 📄 License
+## Project Vision
 
-MIT
+DataMind AI aims to make database intelligence accessible through natural conversation. The vision is to allow users to move from "How do I write this SQL query?" to "Ask the data."
+
+By combining an LLM-powered conversational interface, secure database querying, interactive analytics, statistical exploration, and visual storytelling, DataMind AI provides a unified platform for understanding real-world e-commerce data.
+
+**Developed as part of the iTech AI Innovation Hackathon 2026 at Sri Sairam Engineering College.**
+
+*DataMind AI: Ask. Query. Analyze. Visualize. Understand.*
