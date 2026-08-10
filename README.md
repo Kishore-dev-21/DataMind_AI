@@ -8,7 +8,7 @@ The platform combines Google Gemini, FastAPI, SQLite, React, Recharts, Mermaid, 
 
 DataMind AI is built around the Brazilian E-Commerce Public Dataset (Olist), a real-world Brazilian e-commerce dataset publicly available through Kaggle.
 
-**Live Demo:** [https://data-mind-ai-eken.vercel.app/](https://data-mind-ai-eken.vercel.app/)
+**Live Demo:** [https://data-mind-ai-eken.vercel.app/](https://data-mind-ai-eken.vercel.app/).
 
 **Project Demo Video:**
 
