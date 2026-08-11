@@ -194,7 +194,7 @@ export function ChatInput({ onSend, onStop, isStreaming }: Props) {
             }
           }}
           aria-label="Ask a question about your database"
-          placeholder={listening ? "Listening... Speak your question now" : "Ask about sales, orders, customers, payments, products, or revenue..."}
+          placeholder={listening ? "Listening... Speak your question now" : "Ask about orders, customers, payments, products, or revenue..."}
           className="max-h-[220px] w-full resize-none bg-transparent px-3 pt-2.5 pb-1 text-[15px] leading-6 text-foreground placeholder:text-muted-foreground focus:outline-none"
         />
 
