@@ -139,14 +139,7 @@ Since AI-generated queries interact with databases, DataMind AI includes basic s
 This reduces the risk of accidental changes to the database.
 
 ### 5. Dynamic Data Visualization
-DataMind AI dynamically presents analytical results through interactive visualizations. Powered by Recharts and Mermaid, the supported chart types include:
-* **Bar Charts** (Vertical bar charts for rank and metric comparisons)
-* **Horizontal Bar Charts (`hbar`)** (Optimized for category rankings)
-* **Line Charts** (Time-series analysis and revenue trends)
-* **Pie Charts** (Categorical share breakdown)
-* **Donut Charts** (Distribution and proportion visualization)
-* **Scatter Plots** (Correlation and multi-variable comparison)
-* **ER Diagrams & Flowcharts** (Database entity-relationship mapping via Mermaid)
+DataMind AI dynamically presents analytical results through interactive charts powered by Recharts and Mermaid. Supported chart types include Bar charts, Line charts, Area charts, Pie charts, and Scatter plots.
 
 ### 6. AI-Powered Data Insights
 DataMind AI does not simply return raw numbers. The platform can analyze query results and provide human-readable insights explaining important trends, comparisons, patterns, dominant categories, performance indicators, and business observations.
@@ -218,14 +211,7 @@ Provides information about dataset integrity and health.
 
 ## Visualization Engine
 
-DataMind AI uses Recharts and Mermaid as its visualization engines. Supported visualization types include:
-* **Bar Charts**: Vertical bar plots for comparing numeric values across discrete categories.
-* **Horizontal Bar Charts (`hbar`)**: Optimized for ranking top categories and long label displays.
-* **Line Charts**: Time-series plots for tracking metric changes over time.
-* **Pie Charts**: Proportional distribution of categorical metrics.
-* **Donut Charts**: Ring distribution plots for status and category share.
-* **Scatter Plots**: Multi-variable correlation plots.
-* **ER Diagrams / Flowcharts**: Visual database relationship mapping powered by Mermaid.
+DataMind AI uses Recharts as its primary visualization engine. Supported visualization types include Area charts, Bar charts, Line charts, Pie charts, and Scatter plots.
 
 **Visualization Features:**
 * **Responsive Charts**: Automatically adapt to different screen sizes.
