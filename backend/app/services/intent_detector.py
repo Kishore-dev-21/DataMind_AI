@@ -46,7 +46,7 @@ def detect_intent(question: str) -> dict:
 
     # ── Chart Type Detection ───────────────────────────────────
     # Detect explicit chart requests: "show a bar chart", "create a line chart", "visualize"
-    chart_keywords = ["chart", "graph", "plot", "visualize", "visualise", "draw"]
+    chart_keywords = ["chart", "graph", "plot", "visualize", "visualise", "draw", "heatmap", "histogram"]
     wants_chart = any(word in q for word in chart_keywords)
 
     # Also treat "show ... by ..." distribution questions as wanting a chart
@@ -68,6 +68,10 @@ def detect_intent(question: str) -> dict:
             intent_data["chart_requested"] = "donut"
         elif "hbar" in q or "horizontal" in q:
             intent_data["chart_requested"] = "hbar"
+        elif "heatmap" in q or "heat map" in q:
+            intent_data["chart_requested"] = "heatmap"
+        elif "histogram" in q:
+            intent_data["chart_requested"] = "bar"  # histogram rendered as bar
         else:
             # Smart default: time series → line, categorical → bar
             if any(w in q for w in ["monthly", "month", "yearly", "year", "trend", "over time"]):

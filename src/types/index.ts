@@ -1,6 +1,6 @@
 export type MessageRole = "user" | "assistant" | "system";
 
-export type ChartType = "bar" | "line" | "pie" | "area" | "scatter" | "hbar" | "donut";
+export type ChartType = "bar" | "line" | "pie" | "area" | "scatter" | "hbar" | "donut" | "heatmap";
 
 export interface ChartPayload {
   type: ChartType;

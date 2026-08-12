@@ -36,7 +36,7 @@ export interface AskResponse {
     execution_time_ms?: number;
     total_time_ms?: number;
     from_cache?: boolean;
-    method?: "template" | "gemini" | "error";
+    method?: "template" | "gemini" | "error" | "not_found" | "conversational";
   };
   chart?: ChartPayload | null;
   csvOnly?: boolean;

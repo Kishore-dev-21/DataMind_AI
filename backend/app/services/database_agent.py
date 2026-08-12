@@ -113,7 +113,10 @@ def _is_conversational(question: str) -> bool:
     db_keywords = [
         "order", "payment", "product", "customer", "revenue", "seller",
         "review", "chart", "show", "top", "total", "average", "count",
-        "monthly", "trend", "category", "delivery", "sql", "query", "database"
+        "monthly", "trend", "category", "delivery", "sql", "query", "database",
+        # Chart type words — must never be flagged as conversational
+        "scatter", "plot", "bar", "pie", "line", "area", "donut", "hbar",
+        "heatmap", "graph", "visualize", "visualise", "histogram",
     ]
     words = q.split()
     if len(words) <= 3 and not any(kw in q for kw in db_keywords):

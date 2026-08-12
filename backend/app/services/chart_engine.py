@@ -107,7 +107,7 @@ def decide_chart(data: list[dict], question: str, intent: dict) -> dict | None:
     
     req_type = intent.get("chart_requested") if intent else None
     
-    if req_type in ["bar", "hbar", "line", "area", "pie", "donut", "scatter"]:
+    if req_type in ["bar", "hbar", "line", "area", "pie", "donut", "scatter", "heatmap"]:
         chart_type = req_type
         if string_cols and numeric_cols:
             x_key = string_cols[0]
