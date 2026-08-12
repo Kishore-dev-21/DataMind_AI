@@ -331,17 +331,17 @@ export const useChatStore = create<ChatState>()(
 
           // Handle unsuccessful backend responses
           if (!response.success) {
-            const errorMsg =
-              response.answer ||
-              "An error occurred while processing your question. Please try rephrasing.";
+            const fallbackMsg =
+              "I'm sorry, I couldn't find a relevant result for your query. Please check the spelling and avoid using abbreviations or shortened forms.\n" +
+              "For the best results, please ask questions related to the available e-commerce data and analytics, such as revenue, orders, customers, products, payments, or trends.\n" +
+              "You can also explore the Analytics Dashboard to discover the available insights and supported analyses.";
+
+            const errorMsg = response.answer || fallbackMsg;
             patchMessage(assistantId, {
               content: errorMsg,
               streaming: false,
               steps: undefined,
-              error: {
-                title: "Analysis Error",
-                message: errorMsg,
-              },
+              // Do NOT set error — show as plain assistant message, not a red error card
             });
             set({ isStreaming: false, timers: [] });
             return;
