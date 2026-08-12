@@ -15,8 +15,8 @@ export function PromptSuggestions({ onPick: _onPick }: { onPick: (prompt: string
         <h1 className="text-3xl font-semibold tracking-tight">
           How can I help you today?
         </h1>
-        <p className="mt-2.5 max-w-md text-sm leading-relaxed text-muted-foreground">
-          Ask anything about your e-commerce database — I'll write the SQL, run it, and give you charts and insights.
+        <p className="mt-3 max-w-xl text-center text-sm leading-relaxed text-muted-foreground">
+          Turn questions into data-driven decisions with AI-powered SQL, interactive visualizations, and actionable business insights across the Olist Brazilian E-Commerce dataset.
         </p>
       </motion.div>
 
