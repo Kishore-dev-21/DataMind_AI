@@ -29,6 +29,7 @@ dist-ssr/
 .wrangler/
 .lovable/
 *.local
+olist_ai_data_analyst_dashboard_1.html
 
 # Python
 venv/

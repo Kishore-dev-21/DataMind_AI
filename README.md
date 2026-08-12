@@ -124,11 +124,29 @@ The backend provides the AI layer with information about the database structure,
 * Relationships
 * Available fields
 
-### 4. Secure Read-Only SQL Execution
-AI-generated SQL is executed through a controlled database layer. The SQLite database is accessed in read-only mode to reduce the risk of destructive operations. The execution layer is designed to prevent operations such as DROP, DELETE, UPDATE, INSERT, ALTER, and CREATE.
+### 4. Secure Read-Only SQL Execution & Safe Database Interaction
+AI-generated SQL is executed through a controlled database layer. The SQLite database is accessed in read-only mode to reduce the risk of destructive operations.
+
+#### Safe Database Interaction
+Since AI-generated queries interact with databases, DataMind AI includes basic safety mechanisms. The system is designed to prioritize read-only database operations and prevent destructive commands such as:
+* `DROP`
+* `DELETE`
+* `UPDATE`
+* `INSERT`
+* `ALTER`
+* `TRUNCATE`
+
+This reduces the risk of accidental changes to the database.
 
 ### 5. Dynamic Data Visualization
-DataMind AI dynamically presents analytical results through interactive charts. Supported chart types include Bar charts, Line charts, Area charts, Pie charts, and Scatter plots. The visualization engine is powered by Recharts.
+DataMind AI dynamically presents analytical results through interactive visualizations. Powered by Recharts and Mermaid, the supported chart types include:
+* **Bar Charts** (Vertical bar charts for rank and metric comparisons)
+* **Horizontal Bar Charts (`hbar`)** (Optimized for category rankings)
+* **Line Charts** (Time-series analysis and revenue trends)
+* **Pie Charts** (Categorical share breakdown)
+* **Donut Charts** (Distribution and proportion visualization)
+* **Scatter Plots** (Correlation and multi-variable comparison)
+* **ER Diagrams & Flowcharts** (Database entity-relationship mapping via Mermaid)
 
 ### 6. AI-Powered Data Insights
 DataMind AI does not simply return raw numbers. The platform can analyze query results and provide human-readable insights explaining important trends, comparisons, patterns, dominant categories, performance indicators, and business observations.
@@ -141,6 +159,9 @@ Users can directly inspect the underlying database records through interactive t
 
 ### 9. Comprehensive Analytics Dashboard
 DataMind AI provides a dedicated analytics dashboard containing multiple sections for exploring the Brazilian E-Commerce Public Dataset. Dashboard sections include Overview, Orders, Revenue, Products, Customers, Data Explorer, EDA, and Data Quality.
+
+> **Note on Repository Architecture & GitHub Language Statistics:**  
+> DataMind AI is natively developed as a **TypeScript + React** frontend and a **Python + FastAPI** backend. Standalone HTML dashboard exports previously included for presentation demos have been excluded from tracking so that GitHub Linguist accurately reflects the actual TypeScript and Python source code.
 
 ---
 
@@ -197,7 +218,14 @@ Provides information about dataset integrity and health.
 
 ## Visualization Engine
 
-DataMind AI uses Recharts as its primary visualization engine. Supported visualization types include Area charts, Bar charts, Line charts, Pie charts, and Scatter plots.
+DataMind AI uses Recharts and Mermaid as its visualization engines. Supported visualization types include:
+* **Bar Charts**: Vertical bar plots for comparing numeric values across discrete categories.
+* **Horizontal Bar Charts (`hbar`)**: Optimized for ranking top categories and long label displays.
+* **Line Charts**: Time-series plots for tracking metric changes over time.
+* **Pie Charts**: Proportional distribution of categorical metrics.
+* **Donut Charts**: Ring distribution plots for status and category share.
+* **Scatter Plots**: Multi-variable correlation plots.
+* **ER Diagrams / Flowcharts**: Visual database relationship mapping powered by Mermaid.
 
 **Visualization Features:**
 * **Responsive Charts**: Automatically adapt to different screen sizes.
