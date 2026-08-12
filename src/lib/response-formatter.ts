@@ -379,7 +379,7 @@ function buildChart(
 ): ChartPayload | null {
   if (!data || data.length < 2) return null;
 
-  const isExplicitChart = /chart|graph|plot|visualize|bar|pie|line|scatter|hbar|area|donut|heatmap|histogram/i.test(question);
+  const isExplicitChart = /chart|graph|plot|visualize|bar|pie|line|scatter|hbar|area|donut/i.test(question);
 
   const timeCols = columns.filter((c) => kinds[c] === "date");
   const numericCols = columns.filter((c) => kinds[c] === "numeric" || kinds[c] === "currency" || kinds[c] === "count" || kinds[c] === "percentage");
