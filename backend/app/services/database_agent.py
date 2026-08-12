@@ -219,8 +219,9 @@ def ask_database(user_question: str) -> dict:
             return _error_response(
                 question=user_question,
                 error_msg=(
-                    "The AI service is temporarily rate-limited. Please wait a moment and try again, "
-                    "or ask a more specific database question like 'Show top 10 products by revenue'."
+                    "I’m sorry, I couldn’t find a relevant result for your query. Please check the spelling and avoid using abbreviations or shortened forms.\n"
+                    "For the best results, please ask questions related to the available e-commerce data and analytics, such as revenue, orders, customers, products, payments, or trends.\n"
+                    "You can also explore the Analytics Dashboard to discover the available insights and supported analyses."
                 ),
                 pipeline_start=pipeline_start,
             )
@@ -228,7 +229,9 @@ def ask_database(user_question: str) -> dict:
             return _error_response(
                 question=user_question,
                 error_msg=(
-                    "The AI service is temporarily unavailable. Please try again in a few seconds."
+                    "I’m sorry, I couldn’t find a relevant result for your query. Please check the spelling and avoid using abbreviations or shortened forms.\n"
+                    "For the best results, please ask questions related to the available e-commerce data and analytics, such as revenue, orders, customers, products, payments, or trends.\n"
+                    "You can also explore the Analytics Dashboard to discover the available insights and supported analyses."
                 ),
                 pipeline_start=pipeline_start,
             )
@@ -244,8 +247,9 @@ def ask_database(user_question: str) -> dict:
         return _error_response(
             question=user_question,
             error_msg=(
-                "Unable to generate a SQL query for this question. "
-                "Try rephrasing it as a specific data question, e.g. 'Show total revenue by payment type'."
+                "I’m sorry, I couldn’t find a relevant result for your query. Please check the spelling and avoid using abbreviations or shortened forms.\n"
+                "For the best results, please ask questions related to the available e-commerce data and analytics, such as revenue, orders, customers, products, payments, or trends.\n"
+                "You can also explore the Analytics Dashboard to discover the available insights and supported analyses."
             ),
             pipeline_start=pipeline_start,
         )
@@ -253,7 +257,11 @@ def ask_database(user_question: str) -> dict:
         logger.error(f"SQL generation failed: {e}")
         return _error_response(
             question=user_question,
-            error_msg="Unable to generate a SQL query for this question. Please try rephrasing.",
+            error_msg=(
+                "I’m sorry, I couldn’t find a relevant result for your query. Please check the spelling and avoid using abbreviations or shortened forms.\n"
+                "For the best results, please ask questions related to the available e-commerce data and analytics, such as revenue, orders, customers, products, payments, or trends.\n"
+                "You can also explore the Analytics Dashboard to discover the available insights and supported analyses."
+            ),
             pipeline_start=pipeline_start,
         )
 
@@ -291,8 +299,9 @@ Generate ONE valid SQLite SELECT query. Return ONLY the SQL query, no markdown.
                     return _error_response(
                         question=user_question,
                         error_msg=(
-                            "The generated SQL query failed and the AI fallback is currently unavailable (quota exhausted). "
-                            "Try rephrasing your question more specifically."
+                            "I’m sorry, I couldn’t find a relevant result for your query. Please check the spelling and avoid using abbreviations or shortened forms.\n"
+                            "For the best results, please ask questions related to the available e-commerce data and analytics, such as revenue, orders, customers, products, payments, or trends.\n"
+                            "You can also explore the Analytics Dashboard to discover the available insights and supported analyses."
                         ),
                         sql=sql,
                         pipeline_start=pipeline_start,
@@ -303,7 +312,11 @@ Generate ONE valid SQLite SELECT query. Return ONLY the SQL query, no markdown.
         if not result["success"]:
             return _error_response(
                 question=user_question,
-                error_msg=f"The query could not be executed: {result.get('error', 'Unknown error')}. Try rephrasing your question.",
+                error_msg=(
+                    "I’m sorry, I couldn’t find a relevant result for your query. Please check the spelling and avoid using abbreviations or shortened forms.\n"
+                    "For the best results, please ask questions related to the available e-commerce data and analytics, such as revenue, orders, customers, products, payments, or trends.\n"
+                    "You can also explore the Analytics Dashboard to discover the available insights and supported analyses."
+                ),
                 sql=sql,
                 pipeline_start=pipeline_start,
             )
