@@ -54,36 +54,29 @@ def ask_question(request: AskRequest):
         result = ask_database(question)
 
         if not result.get("success"):
-            # It's a pipeline error (e.g. unsafe query, quota exhausted caught in agent)
             error_msg = result.get("answer", "Unknown error")
-            error_code = "QUERY_ERROR"
-            status_code = 400
+            method = result.get("summary", {}).get("method", "")
 
+            # Only use HTTP error codes for real server/auth failures.
+            # "not_found" / "conversational" are valid 200 responses with a friendly message.
             if "quota" in error_msg.lower() or "rate-limited" in error_msg.lower():
-                error_code = "AI_QUOTA_EXHAUSTED"
-                status_code = 429
-            elif "unsafe" in error_msg.lower() or "read-only" in error_msg.lower() or "not allowed" in error_msg.lower():
-                error_code = "UNSAFE_QUERY"
-            elif "unavailable" in error_msg.lower():
-                error_code = "AI_UNAVAILABLE"
-                status_code = 503
+                return JSONResponse(
+                    status_code=429,
+                    content={"success": False, "error": {"code": "AI_QUOTA_EXHAUSTED", "message": error_msg}, "sql": result.get("sql", ""), "summary": result.get("summary", {})}
+                )
             elif "api key" in error_msg.lower():
-                error_code = "AI_AUTH_ERROR"
-                status_code = 401
-
-            return JSONResponse(
-                status_code=status_code,
-                content={
-                    "success": False,
-                    "error": {
-                        "code": error_code,
-                        "message": error_msg
-                    },
-                    # Preserve the rest of the response structure just in case
-                    "sql": result.get("sql", ""),
-                    "summary": result.get("summary", {})
-                }
-            )
+                return JSONResponse(
+                    status_code=401,
+                    content={"success": False, "error": {"code": "AI_AUTH_ERROR", "message": error_msg}, "sql": result.get("sql", ""), "summary": result.get("summary", {})}
+                )
+            elif "unavailable" in error_msg.lower() and method not in ("not_found", "conversational"):
+                return JSONResponse(
+                    status_code=503,
+                    content={"success": False, "error": {"code": "AI_UNAVAILABLE", "message": error_msg}, "sql": result.get("sql", ""), "summary": result.get("summary", {})}
+                )
+            else:
+                # Query not found / unrecognised input — return 200 with the friendly message
+                return JSONResponse(status_code=200, content=result)
 
         logger.info(
             f"Query processed: '{question[:50]}...' | "
@@ -94,6 +87,7 @@ def ask_question(request: AskRequest):
         )
 
         return result
+
 
     except Exception as e:
         logger.error(f"Unexpected error processing question: {e}", exc_info=True)
