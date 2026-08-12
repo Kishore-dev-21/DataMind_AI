@@ -153,65 +153,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
           )}
         </Section>
 
-        {/* Popular Questions — categorized & collapsible */}
-        <div>
-          <p className="mb-1.5 px-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-            <Sparkles className="size-3 text-primary" />
-            Popular Questions
-          </p>
-          <div className="space-y-1">
-            {POPULAR_QUESTIONS.map((cat) => {
-              const Icon = CATEGORY_ICONS[cat.icon] ?? DollarSign;
-              const isOpen = expandedCategory === cat.label;
-              return (
-                <div key={cat.label} className="rounded-lg overflow-hidden">
-                  <button
-                    onClick={() => setExpandedCategory(isOpen ? null : cat.label)}
-                    className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-xs font-medium text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
-                  >
-                    <Icon className="size-3.5 shrink-0 text-primary/70" />
-                    <span className="flex-1 truncate">{cat.label}</span>
-                    {isOpen
-                      ? <ChevronDown className="size-3 shrink-0 opacity-60" />
-                      : <ChevronRight className="size-3 shrink-0 opacity-40" />
-                    }
-                  </button>
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        key="content"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="ml-3 mt-0.5 space-y-0.5 border-l border-border/40 pl-3 pb-1">
-                          {cat.questions.map((q) => (
-                            <button
-                              key={q}
-                              onClick={() => {
-                                send(q);
-                                if (pathname !== "/") navigate({ to: "/" });
-                              }}
-                              className="flex w-full items-start gap-1.5 rounded-md px-1.5 py-1 text-left text-[11px] leading-tight text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
-                            >
-                              <span className="mt-0.5 size-1 shrink-0 rounded-full bg-primary/50 mt-1.5" />
-                              <span>{q}</span>
-                            </button>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
         <Section label="Workspace">
-          <SideLink to="/database" active={pathname === "/database"} icon={Database} label="Database Explorer" />
           <SideLink to="/settings" active={pathname === "/settings"} icon={Settings} label="Settings" />
         </Section>
       </nav>

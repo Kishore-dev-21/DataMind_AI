@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, Link, useRouterState } from "@tanstack/react-r
 import { AppShell } from "@/components/layout/AppShell";
 import { motion } from "framer-motion";
 import {
-  Home, ShoppingCart, DollarSign, Package, Users, Table, FlaskConical, ShieldCheck,
+  Home, ShoppingCart, DollarSign, Package, Users, Table, FlaskConical, ShieldCheck, Database,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -10,6 +10,7 @@ export const Route = createFileRoute("/dashboard")({ component: DashboardLayout 
 
 const NAV = [
   { to: "/dashboard",           label: "Overview",      icon: Home },
+  { to: "/dashboard/database",  label: "Database Explorer", icon: Database },
   { to: "/dashboard/orders",    label: "Orders",        icon: ShoppingCart },
   { to: "/dashboard/revenue",   label: "Revenue",       icon: DollarSign },
   { to: "/dashboard/products",  label: "Products",      icon: Package },
