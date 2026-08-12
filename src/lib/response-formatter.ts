@@ -35,9 +35,9 @@ type ColumnKind =
   | "text";
 
 const ID_PATTERNS = /(_id|_key|_code|_hash|_uuid)$/i;
-const CURRENCY_PATTERNS = /(value|price|cost|amount|revenue|total|payment|freight|fee|spend|spent|salary|budget|income|profit)/i;
+const MONETARY_PATTERNS = /(value|price|cost|amount|revenue|freight|fee|spend|spent|salary|budget|income|profit)/i;
 const PERCENTAGE_PATTERNS = /(percent|pct|ratio|rate|share|proportion|_prc)/i;
-const COUNT_PATTERNS = /(count|qty|quantity|num|number|total_orders|total_customers|total_products|total_sellers|items_sold|times_sold)/i;
+const COUNT_PATTERNS = /(count|qty|quantity|num|number|orders|customers|products|sellers|payments|reviews|items|times_sold|items_sold)/i;
 const DATE_PATTERNS = /(date|time|timestamp|month|year|quarter|day|week|created|updated|_at$)/i;
 const NAME_PATTERNS = /(name|title|label|category|status|type|city|state|description|method|channel)/i;
 
@@ -47,8 +47,18 @@ function classifyColumn(key: string, sampleValues: unknown[]): ColumnKind {
   if (ID_PATTERNS.test(k) || k === "id") return "id";
   if (DATE_PATTERNS.test(k)) return "date";
   if (PERCENTAGE_PATTERNS.test(k)) return "percentage";
-  if (COUNT_PATTERNS.test(k) && !CURRENCY_PATTERNS.test(k)) return "count";
-  if (CURRENCY_PATTERNS.test(k)) return "currency";
+
+  // A column represents a COUNT / Quantity if it matches count keywords
+  // AND does NOT contain explicit monetary terms (like value, price, cost, amount, revenue, etc.)
+  if (COUNT_PATTERNS.test(k) && !MONETARY_PATTERNS.test(k)) {
+    return "count";
+  }
+
+  // A column represents CURRENCY only if it contains explicit monetary terms
+  if (MONETARY_PATTERNS.test(k)) {
+    return "currency";
+  }
+
   if (NAME_PATTERNS.test(k)) return "name";
 
   const nonNull = sampleValues.filter((v) => v !== null && v !== undefined && v !== "");
