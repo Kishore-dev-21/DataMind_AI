@@ -122,44 +122,26 @@ def _is_conversational(question: str) -> bool:
 
 
 def _conversational_response(question: str, pipeline_start: float) -> dict:
-    """Return a friendly assistant response for non-database conversational input."""
-    q = question.strip().lower().rstrip("!?.,")
+    """Return a not-found message for non-database conversational input."""
     total_time_ms = round((time.perf_counter() - pipeline_start) * 1000, 1)
 
-    if q in GREETINGS:
-        answer = (
-            "Hello! I'm **DataMind AI** — your conversational database intelligence assistant. "
-            "I can help you explore the Olist Brazilian E-Commerce dataset with natural language questions.\n\n"
-            "Here are some things you can ask me:\n"
-            "- **Show total payment value by payment type**\n"
-            "- **Top 10 products by revenue**\n"
-            "- **Monthly order trend as a line chart**\n"
-            "- **Show number of orders by status**\n"
-            "- **Draw ER diagram**\n\n"
-            "Just type your question and I'll write the SQL, run it, and show you the results with charts!"
-        )
-    else:
-        answer = (
-            "I'm **DataMind AI** — a conversational AI analyst for the Olist Brazilian E-Commerce database "
-            "(99,441 orders, 100K+ payments, 32K+ products).\n\n"
-            "I can:\n"
-            "- Translate your **natural language** questions into **SQL queries**\n"
-            "- Run queries instantly on the **live database**\n"
-            "- Generate **interactive charts** (bar, line, pie, area, scatter)\n"
-            "- Draw **ER diagrams** and flowcharts\n"
-            "- Provide **business insights** and summaries\n\n"
-            "Try asking: *'Show top 10 products by revenue'* or *'Monthly revenue trend'*"
-        )
+    answer = (
+        "I'm sorry, I couldn't find a relevant result for your query. "
+        "Please check the spelling and avoid using abbreviations or shortened forms.\n"
+        "For the best results, please ask questions related to the available e-commerce data and analytics, "
+        "such as revenue, orders, customers, products, payments, or trends.\n"
+        "You can also explore the Analytics Dashboard to discover the available insights and supported analyses."
+    )
 
     return {
-        "success": True,
+        "success": False,
         "answer": answer,
         "summary": {
             "rows": 0,
             "execution_time_ms": 0,
             "total_time_ms": total_time_ms,
             "from_cache": False,
-            "method": "conversational",
+            "method": "not_found",
         },
         "sql": "",
         "result": {"columns": [], "data": [], "row_count": 0},
