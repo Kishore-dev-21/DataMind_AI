@@ -11,7 +11,7 @@ import { getDatasets, deleteDataset, type DatasetInfo } from "@/services/api";
 import { toast } from "sonner";
 import type { TableSchema } from "@/types";
 
-export const Route = createFileRoute("/database")({
+export const Route = createFileRoute("/dashboard/database")({
   head: () => ({
     meta: [
       { title: "Databases & Schema — DataMind AI" },
@@ -169,4 +169,5 @@ function DatabasePage() {
         </div>
       </div>
     </div>
+  );
 }

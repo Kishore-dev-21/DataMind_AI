@@ -11,10 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as DatabaseRouteImport } from './routes/database'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardCustomersRouteImport } from './routes/dashboard/customers'
+import { Route as DashboardDatabaseRouteImport } from './routes/dashboard/database'
 import { Route as DashboardEdaRouteImport } from './routes/dashboard/eda'
 import { Route as DashboardExplorerRouteImport } from './routes/dashboard/explorer'
 import { Route as DashboardOrdersRouteImport } from './routes/dashboard/orders'
@@ -32,11 +32,6 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DatabaseRoute = DatabaseRouteImport.update({
-  id: '/database',
-  path: '/database',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -50,6 +45,11 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
 const DashboardCustomersRoute = DashboardCustomersRouteImport.update({
   id: '/customers',
   path: '/customers',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardDatabaseRoute = DashboardDatabaseRouteImport.update({
+  id: '/database',
+  path: '/database',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardEdaRoute = DashboardEdaRouteImport.update({
@@ -86,9 +86,9 @@ const DashboardRevenueRoute = DashboardRevenueRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
-  '/database': typeof DatabaseRoute
   '/settings': typeof SettingsRoute
   '/dashboard/customers': typeof DashboardCustomersRoute
+  '/dashboard/database': typeof DashboardDatabaseRoute
   '/dashboard/eda': typeof DashboardEdaRoute
   '/dashboard/explorer': typeof DashboardExplorerRoute
   '/dashboard/orders': typeof DashboardOrdersRoute
@@ -99,9 +99,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/database': typeof DatabaseRoute
   '/settings': typeof SettingsRoute
   '/dashboard/customers': typeof DashboardCustomersRoute
+  '/dashboard/database': typeof DashboardDatabaseRoute
   '/dashboard/eda': typeof DashboardEdaRoute
   '/dashboard/explorer': typeof DashboardExplorerRoute
   '/dashboard/orders': typeof DashboardOrdersRoute
@@ -114,9 +114,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
-  '/database': typeof DatabaseRoute
   '/settings': typeof SettingsRoute
   '/dashboard/customers': typeof DashboardCustomersRoute
+  '/dashboard/database': typeof DashboardDatabaseRoute
   '/dashboard/eda': typeof DashboardEdaRoute
   '/dashboard/explorer': typeof DashboardExplorerRoute
   '/dashboard/orders': typeof DashboardOrdersRoute
@@ -130,9 +130,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
-    | '/database'
     | '/settings'
     | '/dashboard/customers'
+    | '/dashboard/database'
     | '/dashboard/eda'
     | '/dashboard/explorer'
     | '/dashboard/orders'
@@ -143,9 +143,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/database'
     | '/settings'
     | '/dashboard/customers'
+    | '/dashboard/database'
     | '/dashboard/eda'
     | '/dashboard/explorer'
     | '/dashboard/orders'
@@ -157,9 +157,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/dashboard'
-    | '/database'
     | '/settings'
     | '/dashboard/customers'
+    | '/dashboard/database'
     | '/dashboard/eda'
     | '/dashboard/explorer'
     | '/dashboard/orders'
@@ -172,7 +172,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRouteWithChildren
-  DatabaseRoute: typeof DatabaseRoute
   SettingsRoute: typeof SettingsRoute
 }
 
@@ -190,13 +189,6 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/database': {
-      id: '/database'
-      path: '/database'
-      fullPath: '/database'
-      preLoaderRoute: typeof DatabaseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings': {
@@ -218,6 +210,13 @@ declare module '@tanstack/react-router' {
       path: '/customers'
       fullPath: '/dashboard/customers'
       preLoaderRoute: typeof DashboardCustomersRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/database': {
+      id: '/dashboard/database'
+      path: '/database'
+      fullPath: '/dashboard/database'
+      preLoaderRoute: typeof DashboardDatabaseRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/eda': {
@@ -267,6 +266,7 @@ declare module '@tanstack/react-router' {
 
 interface DashboardRouteChildren {
   DashboardCustomersRoute: typeof DashboardCustomersRoute
+  DashboardDatabaseRoute: typeof DashboardDatabaseRoute
   DashboardEdaRoute: typeof DashboardEdaRoute
   DashboardExplorerRoute: typeof DashboardExplorerRoute
   DashboardOrdersRoute: typeof DashboardOrdersRoute
@@ -278,6 +278,7 @@ interface DashboardRouteChildren {
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardCustomersRoute: DashboardCustomersRoute,
+  DashboardDatabaseRoute: DashboardDatabaseRoute,
   DashboardEdaRoute: DashboardEdaRoute,
   DashboardExplorerRoute: DashboardExplorerRoute,
   DashboardOrdersRoute: DashboardOrdersRoute,
@@ -294,7 +295,6 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRouteWithChildren,
-  DatabaseRoute: DatabaseRoute,
   SettingsRoute: SettingsRoute,
 }
 export const routeTree = rootRouteImport
