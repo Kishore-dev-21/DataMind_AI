@@ -487,7 +487,21 @@ export function formatResponse(
   }
 
   // 1. Build Natural Markdown Content
-  const content = buildMarkdownContent(data, columns, kinds, question);
+  let content = response.answer || "";
+  
+  // If the backend didn't provide a conversational or error answer, or we want to override it with structured data:
+  // We should prefer the backend's `answer` if it was conversational or an error.
+  if (!response.success || response.summary?.method === "conversational" || response.summary?.method === "error") {
+    content = response.answer || "No matching records were found for your query.";
+  } else {
+    // For successful data queries, use the auto-generated markdown or the backend answer if you prefer.
+    // We will auto-generate it if data is present.
+    if (data && data.length > 0) {
+      content = buildMarkdownContent(data, columns, kinds, question);
+    } else {
+      content = response.answer || "No matching records were found for your query.";
+    }
+  }
 
   // 2. Build SQL Payload
   const sql: SqlPayload | undefined = response.sql
