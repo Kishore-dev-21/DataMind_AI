@@ -3,7 +3,7 @@ import {
   AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
-import { TrendingUp, ShoppingCart, Users, Package, DollarSign, Star, Truck, Store, MessageSquare, Database } from "lucide-react";
+import { TrendingUp, ShoppingCart, Users, Package, DollarSign, Star, Truck, Store, MessageSquare } from "lucide-react";
 import { DASHBOARD_DATA, fmtCurrency, fmtNum, fmtPct, STATUS_COLORS, titleCase } from "@/lib/dashboard-data";
 import { KPICard } from "@/components/dashboard/KPICard";
 import { motion } from "framer-motion";
@@ -23,30 +23,6 @@ function OverviewPage() {
 
   return (
     <div className="p-6 space-y-6 pb-12">
-      {/* Notice for Judges / Database Connection Banner */}
-      <motion.div
-        initial={{ opacity: 0, y: -6 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex items-center gap-3.5 rounded-2xl border border-amber-500/35 bg-gradient-to-r from-amber-500/15 via-emerald-500/10 to-transparent p-4 shadow-lg shadow-amber-950/20 backdrop-blur-md ring-1 ring-amber-500/25"
-      >
-        <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-amber-500/25 text-amber-300 ring-1 ring-amber-500/40">
-          <Database className="size-5 animate-pulse text-amber-300" />
-        </div>
-        <div className="flex-1 space-y-0.5">
-          <div className="flex items-center gap-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
-              ⚡ Database Connection Notice
-            </span>
-            <span className="rounded-full bg-amber-500/25 px-2 py-0.5 text-[10px] font-semibold text-amber-300 ring-1 ring-amber-400/30">
-              Notice for Judges
-            </span>
-          </div>
-          <p className="text-xs leading-relaxed font-medium text-foreground/90">
-            Your first question may take a little longer while we connect to the database. Once connected, you can continue exploring your data with faster responses.
-          </p>
-        </div>
-      </motion.div>
-
       {/* KPI Row */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         <KPICard label="Total Orders"     value={fmtNum(k.totalOrders)}            sub="All-time orders in dataset"   icon={ShoppingCart} color="#F2B84B" delay={0} />
