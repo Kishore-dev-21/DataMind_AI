@@ -102,4 +102,3 @@ export function PromptSuggestions({ onPick }: { onPick: (prompt: string) => void
     </div>
   );
 }
-
