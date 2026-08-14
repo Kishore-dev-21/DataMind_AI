@@ -1,0 +1,214 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --font-sans: "IBM Plex Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-violet: var(--violet);
+  --color-cyan: var(--cyan);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.875rem;
+
+  /* === OLIST AI DASHBOARD THEME (DEEP SLATE + AMBER GOLD) === */
+  --background: oklch(0.12 0.015 250);          /* #0D1117 */
+  --foreground: oklch(0.93 0.01 250);           /* #E7EAEE */
+  --surface: oklch(0.14 0.018 250);              /* #10151D */
+  --card: oklch(0.17 0.022 250);                 /* #151C26 */
+  --card-foreground: oklch(0.93 0.01 250);
+  --popover: oklch(0.17 0.022 250);
+  --popover-foreground: oklch(0.93 0.01 250);
+
+  --primary: oklch(0.80 0.16 85);               /* #F2B84B - Warm Amber Gold */
+  --primary-foreground: oklch(0.12 0.03 85);
+
+  --secondary: oklch(0.20 0.025 250);            /* #1B2330 */
+  --secondary-foreground: oklch(0.93 0.01 250);
+
+  --muted: oklch(0.18 0.022 250);
+  --muted-foreground: oklch(0.65 0.020 250);     /* #8B94A3 */
+
+  --accent: oklch(0.20 0.025 250);               /* #1B2330 */
+  --accent-foreground: oklch(0.80 0.16 85);
+
+  --violet: oklch(0.70 0.18 300);                /* #B08BF0 */
+  --cyan: oklch(0.80 0.15 190);                  /* #4FD1C5 */
+  --success: oklch(0.75 0.18 150);               /* #3ECF8E */
+  --warning: oklch(0.80 0.16 85);                /* #F2B84B */
+  --destructive: oklch(0.60 0.20 25);            /* #E5646A */
+  --destructive-foreground: oklch(0.99 0 0);
+
+  --border: oklch(0.26 0.025 250 / 60%);         /* #252E3B */
+  --input: oklch(0.26 0.025 250 / 70%);
+  --ring: oklch(0.80 0.16 85);
+
+  --chart-1: oklch(0.80 0.16 85);               /* Amber Gold */
+  --chart-2: oklch(0.75 0.18 150);              /* Emerald Green */
+  --chart-3: oklch(0.65 0.18 250);              /* Soft Blue */
+  --chart-4: oklch(0.70 0.18 300);              /* Purple */
+  --chart-5: oklch(0.80 0.15 190);              /* Teal */
+
+  --sidebar: oklch(0.14 0.018 250);              /* #10151D */
+  --sidebar-foreground: oklch(0.93 0.01 250);
+  --sidebar-primary: oklch(0.80 0.16 85);
+  --sidebar-primary-foreground: oklch(0.12 0.03 85);
+  --sidebar-accent: oklch(0.20 0.025 250);       /* #1B2330 */
+  --sidebar-accent-foreground: oklch(0.80 0.16 85);
+  --sidebar-border: oklch(0.22 0.020 250 / 80%);
+  --sidebar-ring: oklch(0.80 0.16 85);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 35%, transparent);
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-muted-foreground);
+  }
+}
+
+@utility glass {
+  background: color-mix(in oklab, var(--card) 85%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid var(--color-border);
+}
+
+@utility gradient-text {
+  background-image: linear-gradient(
+    100deg,
+    #F2B84B,
+    #F59E0B 45%,
+    #3ECF8E
+  );
+  background-clip: text;
+  color: transparent;
+}
+
+@utility glow-primary {
+  box-shadow: 0 18px 60px -22px color-mix(in oklab, var(--primary) 70%, transparent);
+}
+
+@utility aurora {
+  background-image:
+    radial-gradient(
+      60% 45% at 15% 0%,
+      color-mix(in oklab, var(--primary) 18%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      50% 40% at 85% 5%,
+      color-mix(in oklab, var(--violet) 15%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      45% 45% at 50% 100%,
+      color-mix(in oklab, var(--cyan) 10%, transparent),
+      transparent 70%
+    );
+}
+
+@keyframes caret-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes shimmer-sweep {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@utility shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--muted-foreground) 0%,
+    var(--foreground) 45%,
+    var(--muted-foreground) 70%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer-sweep 2.2s linear infinite;
+}

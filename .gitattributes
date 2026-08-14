@@ -1,0 +1,6 @@
+*.db filter=lfs diff=lfs merge=lfs -text
+
+# Generated build output
+dist/ linguist-generated
+build/ linguist-generated
+.output/ linguist-generated
