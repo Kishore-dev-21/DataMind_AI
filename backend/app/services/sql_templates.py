@@ -476,17 +476,27 @@ FROM (
 )
 """.strip()
 
-    # "revenue by state"
-    if ("revenue" in q or "sales" in q or "payment" in q) and "state" in q:
-        return """
-SELECT c.customer_state AS state,
-       ROUND(SUM(p.payment_value), 2) AS revenue,
-       COUNT(DISTINCT o.order_id) AS orders
-FROM customers c
-JOIN orders o ON c.customer_id = o.customer_id
-JOIN payments p ON o.order_id = p.order_id
-GROUP BY state
-ORDER BY revenue DESC
-""".strip()
+    # ─────────────────────────────────────────────────────
+    # SINGLE-WORD & CORE ENTITY FALLBACK QUERIES
+    # ─────────────────────────────────────────────────────
+    clean_q = q.strip().rstrip("!?.")
+
+    if clean_q in ("orders", "order", "show orders", "get orders", "all orders", "list orders"):
+        return "SELECT order_status, COUNT(*) AS count FROM orders GROUP BY order_status ORDER BY count DESC"
+
+    if clean_q in ("products", "product", "show products", "get products", "all products", "list products"):
+        return "SELECT product_category_name, COUNT(*) AS product_count FROM products GROUP BY product_category_name ORDER BY product_count DESC LIMIT 10"
+
+    if clean_q in ("customers", "customer", "show customers", "get customers", "all customers", "list customers"):
+        return "SELECT customer_state, COUNT(*) AS customer_count FROM customers GROUP BY customer_state ORDER BY customer_count DESC LIMIT 10"
+
+    if clean_q in ("payments", "payment", "show payments", "get payments", "all payments", "list payments"):
+        return "SELECT payment_type, COUNT(*) AS count, ROUND(SUM(payment_value), 2) AS total_value FROM payments GROUP BY payment_type ORDER BY total_value DESC"
+
+    if clean_q in ("sellers", "seller", "show sellers", "get sellers", "all sellers", "list sellers"):
+        return "SELECT seller_state, COUNT(*) AS count FROM sellers GROUP BY seller_state ORDER BY count DESC LIMIT 10"
+
+    if clean_q in ("reviews", "review", "show reviews", "get reviews", "all reviews", "list reviews"):
+        return "SELECT review_score, COUNT(*) AS count FROM reviews GROUP BY review_score ORDER BY review_score DESC"
 
     return None

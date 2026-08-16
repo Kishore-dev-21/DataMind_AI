@@ -44,6 +44,13 @@ def execute_query(query: str):
             "execution_time_ms": 0,
         }
 
+    # Safety: Automatically inject LIMIT 100 into SELECT queries missing a LIMIT clause
+    # to prevent fetching 100,000+ rows into Python memory which causes 30-60 second delays
+    exec_query = query
+    query_upper = query.upper()
+    if "LIMIT" not in query_upper and "COUNT(" not in query_upper and "AVG(" not in query_upper and "SUM(" not in query_upper:
+        exec_query = f"{query.rstrip(';')} LIMIT 100"
+
     try:
         start = time.perf_counter()
 
@@ -51,7 +58,7 @@ def execute_query(query: str):
         conn.row_factory = sqlite3.Row
 
         cursor = conn.cursor()
-        cursor.execute(query)
+        cursor.execute(exec_query)
 
         rows = cursor.fetchall()
 
