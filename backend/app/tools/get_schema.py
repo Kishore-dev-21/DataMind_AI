@@ -1,10 +1,12 @@
 import sqlite3
+import functools
 from pathlib import Path
 
 
 DB_PATH = Path(__file__).resolve().parents[2] / "database" / "ecommerce.db"
 
 
+@functools.lru_cache(maxsize=1)
 def get_schema():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()

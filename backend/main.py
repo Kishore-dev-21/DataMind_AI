@@ -64,8 +64,25 @@ app.add_middleware(
 )
 
 # ==========================================
-# HEALTH ENDPOINT
+# HEALTH & STARTUP ENDPOINTS
 # ==========================================
+
+@app.on_event("startup")
+def startup_event():
+    """Warm up database schema cache, connection pool, and auto-build DB if missing/corrupt."""
+    try:
+        from pathlib import Path
+        db_file = Path(__file__).resolve().parent / "database" / "ecommerce.db"
+        if not db_file.exists() or db_file.stat().st_size < 1_000_000:
+            logger.info("Database file missing or unpopulated. Building SQLite database from CSV datasets...")
+            from scripts.import_csv_to_sqlite import build_database
+            build_database()
+
+        get_schema()
+        logger.info("Database schema pre-loaded and cached successfully.")
+    except Exception as e:
+        logger.warning(f"Startup schema pre-load warning: {e}")
+
 
 @app.get("/health")
 def health_check():

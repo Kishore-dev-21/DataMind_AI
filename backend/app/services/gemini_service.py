@@ -5,42 +5,43 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-API_KEY = os.getenv("GEMINI_API_KEY")
-MODEL_ENV = os.getenv("GEMINI_MODEL")
-
-if not API_KEY:
-    raise ValueError("GEMINI_API_KEY is not configured")
-
-# Models in priority order — use latest stable models first
+# Models in priority order — official fast stable models
 MODELS_TO_TRY = [
-    "gemini-3.5-flash",
-    "gemini-3.5-flash-lite",
     "gemini-2.5-flash",
+    "gemini-2.0-flash",
+    "gemini-1.5-flash",
     "gemini-2.5-pro",
+    "gemini-1.5-pro",
 ]
 
-if MODEL_ENV and MODEL_ENV not in MODELS_TO_TRY:
-    MODELS_TO_TRY.insert(0, MODEL_ENV)
-elif MODEL_ENV in MODELS_TO_TRY:
-    MODELS_TO_TRY.remove(MODEL_ENV)
-    MODELS_TO_TRY.insert(0, MODEL_ENV)
-
-
 def ask_gemini(prompt: str) -> str:
+    api_key = os.getenv("GEMINI_API_KEY")
+    model_env = os.getenv("GEMINI_MODEL")
+
+    models = list(MODELS_TO_TRY)
+    if model_env and model_env not in models:
+        models.insert(0, model_env)
+    elif model_env in models:
+        models.remove(model_env)
+        models.insert(0, model_env)
+
+    if not api_key:
+        raise RuntimeError("The Gemini API key is not configured. Please set GEMINI_API_KEY in backend/.env")
+
     last_error = None
 
-    for model_name in MODELS_TO_TRY:
+    for model_name in models:
         for attempt in range(2):
             try:
                 url = (
                     f"https://generativelanguage.googleapis.com/v1beta/models/"
-                    f"{model_name}:generateContent?key={API_KEY}"
+                    f"{model_name}:generateContent?key={api_key}"
                 )
                 payload = {"contents": [{"parts": [{"text": prompt}]}]}
                 headers = {"Content-Type": "application/json"}
 
                 response = requests.post(
-                    url, json=payload, headers=headers, timeout=30
+                    url, json=payload, headers=headers, timeout=12
                 )
 
                 if response.status_code == 200:

@@ -2,15 +2,11 @@ import sqlite3
 import pandas as pd
 from pathlib import Path
 
-# Project paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATASET_DIR = BASE_DIR / "datasets"
 DATABASE_DIR = BASE_DIR / "database"
-DATABASE_DIR.mkdir(exist_ok=True)
-
 DB_PATH = DATABASE_DIR / "ecommerce.db"
 
-# CSV file -> SQLite table mapping
 FILES = {
     "olist_customers_dataset.csv": "customers",
     "olist_orders_dataset.csv": "orders",
@@ -23,27 +19,29 @@ FILES = {
     "product_category_name_translation.csv": "category_translation",
 }
 
-conn = sqlite3.connect(DB_PATH)
+def build_database():
+    DATABASE_DIR.mkdir(exist_ok=True)
+    if DB_PATH.exists():
+        try:
+            if DB_PATH.stat().st_size < 1_000_000:
+                DB_PATH.unlink()
+        except Exception:
+            pass
 
-for csv_file, table_name in FILES.items():
-    print(f"Importing {csv_file} -> {table_name}")
+    conn = sqlite3.connect(DB_PATH)
 
-    csv_path = DATASET_DIR / csv_file
+    for csv_file, table_name in FILES.items():
+        csv_path = DATASET_DIR / csv_file
+        if not csv_path.exists():
+            print(f"[Database Build] File not found: {csv_file}")
+            continue
 
-    if not csv_path.exists():
-        print(f"❌ File not found: {csv_file}")
-        continue
+        print(f"[Database Build] Importing {csv_file} -> {table_name}")
+        df = pd.read_csv(csv_path)
+        df.to_sql(table_name, conn, if_exists="replace", index=False)
 
-    df = pd.read_csv(csv_path)
+    conn.close()
+    print(f"[Database Build] Database ready at {DB_PATH}")
 
-    df.to_sql(
-        table_name,
-        conn,
-        if_exists="replace",
-        index=False
-    )
-
-conn.close()
-
-print("\n✅ Database created successfully!")
-print(f"Location: {DB_PATH}")
+if __name__ == "__main__":
+    build_database()
